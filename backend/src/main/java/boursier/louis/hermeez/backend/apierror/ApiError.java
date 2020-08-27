@@ -11,13 +11,9 @@ import java.util.List;
 @Setter
 public class ApiError {
 
-    private HttpStatus status;
-    private String message;
-    private List<String> errors;
-
-    public ApiError() {
-        super();
-    }
+    private final HttpStatus status;
+    private final String message;
+    private final List<String> errors;
 
     public ApiError(final HttpStatus status, final String message, final List<String> errors) {
         super();

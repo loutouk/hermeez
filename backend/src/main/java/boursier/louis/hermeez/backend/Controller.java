@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend;
 
+import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

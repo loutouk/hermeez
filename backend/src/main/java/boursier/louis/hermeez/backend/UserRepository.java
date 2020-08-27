@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend;
 
+import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

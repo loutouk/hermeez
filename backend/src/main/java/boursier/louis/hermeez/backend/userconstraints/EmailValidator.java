@@ -1,6 +1,6 @@
 package boursier.louis.hermeez.backend.userconstraints;
 
-import boursier.louis.hermeez.backend.User;
+import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,6 +18,7 @@ public class EmailValidator implements ConstraintValidator<EmailUniqueConstraint
 
     @Override
     public void initialize(EmailUniqueConstraint contactNumber) {
+        // Do nothing because all logic can be handle at validation time with the isValid() method
     }
 
     @Override
@@ -29,7 +30,7 @@ public class EmailValidator implements ConstraintValidator<EmailUniqueConstraint
     }
 
     private boolean isStringEmpty(String input) {
-        return (input == null || input.trim().length() == 0);
+        return input == null || input.trim().length() == 0;
     }
 
     private boolean isEmailUnique(String email) {

@@ -90,7 +90,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     //
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(final MethodArgumentTypeMismatchException ex, final WebRequest request) {
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(final MethodArgumentTypeMismatchException ex) {
         logger.info(ex.getClass().getName());
         //
         final String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
@@ -100,7 +100,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(final ConstraintViolationException ex, final WebRequest request) {
+    public ResponseEntity<Object> handleConstraintViolation(final ConstraintViolationException ex) {
         logger.info(ex.getClass().getName());
         //
         final List<String> errors = new ArrayList<String>();
@@ -157,7 +157,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     // 500
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
+    public ResponseEntity<Object> handleAll(final Exception ex) {
         logger.info(ex.getClass().getName());
         logger.error("error", ex);
         //

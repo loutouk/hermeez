@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend;
 
+import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -38,4 +39,5 @@ public class CustomizedUserServiceImpl implements CustomizedUserService {
         users = mongoOperations.find(searchQuery, User.class);
         return users;
     }
+
 }

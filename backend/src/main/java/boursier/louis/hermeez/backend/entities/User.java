@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend;
+package boursier.louis.hermeez.backend.entities;
 
 import boursier.louis.hermeez.backend.userconstraints.EmailUniqueConstraint;
 import lombok.Getter;
