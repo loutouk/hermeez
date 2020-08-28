@@ -9,14 +9,11 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
-
-enum Membership {
-    FREE, PREMIUM
-}
-
 @Getter
 @Setter
 public class User {
+
+    public enum Role {USER, PREMIUM}
 
     @Id
     private String id;
@@ -29,19 +26,13 @@ public class User {
     private String email;
     @NotEmpty
     private String password;
-    private Membership membership;
+    private Role role;
 
-    /**
-     * Creates a new {@link User}.
-     *
-     * @param email    must not be {@literal null} or empty and should be unique.
-     * @param password must not be {@literal null} or empty.
-     */
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.membership = Membership.FREE;
+        this.role = Role.USER;
     }
 }

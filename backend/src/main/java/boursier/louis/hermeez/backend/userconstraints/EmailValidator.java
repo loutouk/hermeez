@@ -33,6 +33,7 @@ public class EmailValidator implements ConstraintValidator<EmailUniqueConstraint
         return input == null || input.trim().length() == 0;
     }
 
+    // TODO check at signin time but not here bc we want to allow updates
     private boolean isEmailUnique(String email) {
         Query searchQuery = new Query();
         searchQuery.addCriteria(Criteria.where("email").is(email));
