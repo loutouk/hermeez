@@ -1,6 +1,6 @@
 package boursier.louis.hermeez.backend.apierror;
 
-import boursier.louis.hermeez.backend.Utils.Constants;
+import boursier.louis.hermeez.backend.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,9 +32,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         ApiError apiError = null;
-        if(Constants.DEBUG == true){
+        if (Constants.DEBUG == true) {
             apiError = new ApiError(HttpStatus.UNAUTHORIZED, e.toString(), httpServletResponse.toString());
-        }else{
+        } else {
             apiError = new ApiError(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "UNAUTHORIZED");
         }
         ServerHttpResponse outputMessage = new ServletServerHttpResponse(httpServletResponse);

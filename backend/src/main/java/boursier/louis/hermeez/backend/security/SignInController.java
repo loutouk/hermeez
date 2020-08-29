@@ -1,9 +1,8 @@
 package boursier.louis.hermeez.backend.security;
 
-import boursier.louis.hermeez.backend.UserRepository;
 import boursier.louis.hermeez.backend.entities.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
+import boursier.louis.hermeez.backend.usecases.UserOperations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,18 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/signin")
 public class SignInController {
 
-    private final UserRepository repository;
-
-    private final PasswordEncoder passwordEncoder;
-
-    public SignInController(UserRepository repository, PasswordEncoder passwordEncoder) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private UserOperations userOperations;
 
     @PostMapping
-    User signin(@RequestParam String email, @RequestParam String password) {
-        User u = new User(null,null, email, passwordEncoder.encode(password));
-        return repository.save(u);
+    User signIn(@RequestParam String email, @RequestParam String password) {
+        return userOperations.signIn(email, password);
     }
 }

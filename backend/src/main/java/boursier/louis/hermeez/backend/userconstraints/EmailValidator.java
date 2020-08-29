@@ -1,15 +1,9 @@
 package boursier.louis.hermeez.backend.userconstraints;
 
-import boursier.louis.hermeez.backend.Utils.EmailValidation;
-import boursier.louis.hermeez.backend.entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import boursier.louis.hermeez.backend.utils.EmailValidation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
 
 
 public class EmailValidator implements ConstraintValidator<EmailValidConstraint, String> {

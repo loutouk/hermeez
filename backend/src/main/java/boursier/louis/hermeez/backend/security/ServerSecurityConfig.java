@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -62,20 +63,46 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * When matching the specified patterns against an incoming request,
+     * the matching is done in the order in which the elements are declared.
+     * So the most specific matches patterns should come first and the most general should come last.
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().anyRequest().permitAll();
-
-        /*http
+       http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/signin").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());*/
+                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
+    }
+
+    /**
+     * Allows unauthenticated users to access the registration and log in functions.
+     * This will grant them access to an OAuth token that will be needed for other requests.
+     *
+     * Because this is the weak point, measures should be taken to protect it:
+     * Client side: reCAPTCHA
+     * Server side: IP tracking, call rate limiting and DDOS protection
+     *
+     * An email validation protocol could be used to reduce the creation of fake accounts
+     *
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // TODO figure out a way to provide OAuth token with response and best practices about it
+        web
+                .ignoring().antMatchers("/signin").and()
+                .ignoring().antMatchers("/register");
     }
 
 }

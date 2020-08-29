@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend.Utils;
+package boursier.louis.hermeez.backend.utils;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;

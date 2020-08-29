@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+interface CustomizedUserService {
+    List<User> findByNameAndFirstName(@Param("lastName") String lastName, @Param("firstName") String firstName);
+}
+
 /**
  * Lets Spring know that this class may override {@link boursier.louis.hermeez.backend.UserRepository} auto
  * generated functions behaviour thanks to the Impl postfix. Spring will prioritize our implementation over theirs.
@@ -19,11 +25,6 @@ import java.util.List;
  * Having the repository implementing this interface allows clients to see the implemented functions,
  * discoverable as the HATEOAS principles recommend.
  */
-
-interface CustomizedUserService {
-    List<User> findByNameAndFirstName(@Param("lastName") String lastName, @Param("firstName") String firstName);
-}
-
 @Primary
 @Service
 public class CustomizedUserServiceImpl implements CustomizedUserService {
