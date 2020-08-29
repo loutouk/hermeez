@@ -14,6 +14,9 @@ public class BackendApplication implements CommandLineRunner {
     private UserRepository repository;
 
     @Autowired
+    private Controller controller;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
@@ -22,7 +25,6 @@ public class BackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        repository.deleteAll();
     }
 
 }

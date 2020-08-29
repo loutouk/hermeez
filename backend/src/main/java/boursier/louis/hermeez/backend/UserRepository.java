@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * This class delivers auto generated CRUD operations on the chosen entity thanks to the MongoRepository interface.
  * <p>
- * Repositories may be composed of multiple custom implementations.
+ * Repositories may be enhanced with multiple custom implementations.
  * Custom implementations have a higher priority than the base implementation and repository aspects.
- * This ordering lets you override base repository and aspect methods and resolves ambiguity if two fragments
- * contribute the same method signature.
+ * This ordering overrides base repository and aspect methods and resolves ambiguity
+ * if two fragments contribute the same method signature.
  * <p>
- * Extending the fragment interface with your repository interface combines the CRUD
+ * Extending the fragment interface with a repository interface combines the CRUD
  * and custom functionality and makes it available to clients.
  */
 

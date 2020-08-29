@@ -18,7 +18,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+/**
+ * EnableWebSecurity will provide configuration via HttpSecurity on the url pattern level.
+ * See {@link boursier.louis.hermeez.backend.security.ServerSecurityConfig#configure(HttpSecurity)}.
+ */
 @EnableWebSecurity
+/**
+ * The @EnableGlobalMethodSecurity permits to specify security on the method level,
+ * some of annotation it will enable are PreAuthorize PostAuthorize.
+ * Its attribute proxyTargetClass is set in order to have this working for RestController’s methods,
+ * because controllers are usually classes, not implementing any interfaces.
+ * See {@link boursier.louis.hermeez.backend.Controller}.
+ */
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -52,14 +63,19 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    public void configure(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests().anyRequest().permitAll();
+
+        /*http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/signin").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
+                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());*/
     }
 
 }

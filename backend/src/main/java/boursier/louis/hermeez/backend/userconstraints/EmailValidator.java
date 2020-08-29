@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend.userconstraints;
 
+import boursier.louis.hermeez.backend.Utils.EmailValidation;
 import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -11,35 +12,16 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
 
-public class EmailValidator implements ConstraintValidator<EmailUniqueConstraint, String> {
-
-    @Autowired
-    private MongoOperations mongoOperations;
+public class EmailValidator implements ConstraintValidator<EmailValidConstraint, String> {
 
     @Override
-    public void initialize(EmailUniqueConstraint contactNumber) {
+    public void initialize(EmailValidConstraint contactNumber) {
         // Do nothing because all logic can be handle at validation time with the isValid() method
     }
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
-        if (isStringEmpty(email)) {
-            return false;
-        }
-        return isEmailUnique(email);
+        return EmailValidation.isValidEmailAddress(email);
     }
-
-    private boolean isStringEmpty(String input) {
-        return input == null || input.trim().length() == 0;
-    }
-
-    // TODO check at signin time but not here bc we want to allow updates
-    private boolean isEmailUnique(String email) {
-        Query searchQuery = new Query();
-        searchQuery.addCriteria(Criteria.where("email").is(email));
-        List<User> existingUsers = mongoOperations.find(searchQuery, User.class);
-        return existingUsers.isEmpty();
-    }
-
 }
 

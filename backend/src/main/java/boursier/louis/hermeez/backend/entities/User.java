@@ -1,6 +1,6 @@
 package boursier.louis.hermeez.backend.entities;
 
-import boursier.louis.hermeez.backend.userconstraints.EmailUniqueConstraint;
+import boursier.louis.hermeez.backend.userconstraints.EmailValidConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -22,7 +22,7 @@ public class User {
 
     @Indexed(unique = true) // Creates an index on the email for faster queries as it is often used as an id
     @Valid
-    @EmailUniqueConstraint
+    @EmailValidConstraint
     private String email;
     @NotEmpty
     private String password;
@@ -34,5 +34,18 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = Role.USER;
+    }
+
+    // TODO remove in prod
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

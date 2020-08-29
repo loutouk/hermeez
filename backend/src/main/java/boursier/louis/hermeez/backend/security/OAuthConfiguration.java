@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 
 @Configuration
 @EnableAuthorizationServer
+@EnableResourceServer
 public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
@@ -48,6 +49,12 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
         this.userService = userService;
     }
 
+    /**
+     * OAuth tokens are stored in memory/ram hence lost when the server is shut down.
+     * Set with clients.inMemory() instead of implementing a persistent token management with clients.jdbc().
+     * @param clients
+     * @throws Exception
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
@@ -59,6 +66,11 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
                 .scopes("read", "write");
     }
 
+    /**
+     * Define the use of a JWT token with accessTokenConverter
+     * Define the use of an UserDetailsService and AuthenticationManager interfaces to perform authentication
+     * @param endpoints
+     */
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints

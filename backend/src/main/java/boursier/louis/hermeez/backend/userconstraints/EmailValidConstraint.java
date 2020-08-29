@@ -8,8 +8,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = EmailValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EmailUniqueConstraint {
-    String message() default "email not unique";
+public @interface EmailValidConstraint {
+    String message() default "email is not valid";
 
     Class<?>[] groups() default {};
 
