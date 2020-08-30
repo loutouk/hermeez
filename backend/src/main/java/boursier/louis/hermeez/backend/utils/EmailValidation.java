@@ -1,17 +1,10 @@
 package boursier.louis.hermeez.backend.utils;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 public class EmailValidation {
-    public static boolean isValidEmailAddress(String email) {
-        boolean result = true;
-        try {
-            InternetAddress emailAddress = new InternetAddress(email);
-            emailAddress.validate();
-        } catch (AddressException ex) {
-            result = false;
-        }
-        return result;
+    public static boolean isValidEmail(String email) {
+        return !email.isEmpty() &&
+                email.length() >= Constants.EMAIL_MIN_LENGTH &&
+                email.length() <= Constants.EMAIL_MAX_LENGTH &&
+                email.contains("@");
     }
 }

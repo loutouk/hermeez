@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * Matches specified urls to manually defined functions.
  * Other auto generated URLs are available. See {@link boursier.louis.hermeez.backend.UserRepository}.
@@ -54,12 +57,16 @@ public class Controller {
     }
 
     @PostMapping("/signin")
-    User signIn(@RequestParam String email, @RequestParam String password) {
-        return userOperations.signIn(email, password);
+    User signIn(@RequestParam String email, @RequestParam String password, HttpServletResponse response) throws IOException {
+        User user = userOperations.signIn(email, password);
+        if(user == null) {
+            response.getWriter().println("wrong credentials");
+        }
+        return user;
     }
 
-    /*@PostMapping("/register")
+    @PostMapping("/register")
     User register(@RequestParam String email, @RequestParam String password) {
         return userOperations.register(email, password);
-    }*/
+    }
 }

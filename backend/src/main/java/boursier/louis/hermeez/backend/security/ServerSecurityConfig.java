@@ -67,7 +67,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
      * When matching the specified patterns against an incoming request,
      * the matching is done in the order in which the elements are declared.
      * So the most specific matches patterns should come first and the most general should come last.
-     *
+     * <p>
      * SessionCreationPolicy.STATELESS has the direct implication that cookies are not used and
      * so each and every request needs to be re-authenticated. In accordance with the REST architecture.
      *
@@ -77,7 +77,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-       http
+        http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
@@ -90,11 +90,11 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Allows unauthenticated users to access the registration and log in functions.
      * This will grant them access to an OAuth token that will be needed for other requests.
-     *
+     * <p>
      * Because this is the weak point, measures should be taken to protect it:
      * Client side: reCAPTCHA
      * Server side: IP tracking, call rate limiting and DDOS protection
-     *
+     * <p>
      * An email validation protocol could be used to reduce the creation of fake accounts
      *
      * @param web

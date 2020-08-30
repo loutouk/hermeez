@@ -1,8 +1,5 @@
 package boursier.louis.hermeez.backend;
 
-import boursier.louis.hermeez.backend.entities.User;
-import boursier.louis.hermeez.backend.usecases.MongoUserOperations;
-import boursier.louis.hermeez.backend.usecases.UserOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

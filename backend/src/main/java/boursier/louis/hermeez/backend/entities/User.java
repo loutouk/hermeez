@@ -1,6 +1,7 @@
 package boursier.louis.hermeez.backend.entities;
 
 import boursier.louis.hermeez.backend.entities.userconstraints.EmailValidConstraint;
+import boursier.louis.hermeez.backend.entities.userconstraints.PasswordValidConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +28,10 @@ public class User {
     private String email;
     @NotEmpty
     @JsonIgnore
+    @PasswordValidConstraint
     private String password;
     private Role role;
+
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;

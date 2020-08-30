@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 interface CustomizedUserService {
     List<User> findByNameAndFirstName(@Param("lastName") String lastName, @Param("firstName") String firstName);
 }
