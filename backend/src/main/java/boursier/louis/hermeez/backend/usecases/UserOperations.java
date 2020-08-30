@@ -15,6 +15,4 @@ public interface UserOperations {
     void updateToPremium(String email);
 
     User signIn(String email, String password);
-
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

@@ -68,6 +68,9 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
      * the matching is done in the order in which the elements are declared.
      * So the most specific matches patterns should come first and the most general should come last.
      *
+     * SessionCreationPolicy.STATELESS has the direct implication that cookies are not used and
+     * so each and every request needs to be re-authenticated. In accordance with the REST architecture.
+     *
      * @param http
      * @throws Exception
      */

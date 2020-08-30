@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend;
 
+import boursier.louis.hermeez.backend.entities.User;
 import boursier.louis.hermeez.backend.usecases.UserOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,4 +52,14 @@ public class Controller {
         System.out.println(authentication.getPrincipal().toString());
         return "Test.";
     }
+
+    @PostMapping("/signin")
+    User signIn(@RequestParam String email, @RequestParam String password) {
+        return userOperations.signIn(email, password);
+    }
+
+    /*@PostMapping("/register")
+    User register(@RequestParam String email, @RequestParam String password) {
+        return userOperations.register(email, password);
+    }*/
 }

@@ -1,6 +1,6 @@
 package boursier.louis.hermeez.backend.entities;
 
-import boursier.louis.hermeez.backend.userconstraints.EmailValidConstraint;
+import boursier.louis.hermeez.backend.entities.userconstraints.EmailValidConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;

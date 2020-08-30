@@ -2,6 +2,7 @@ package boursier.louis.hermeez.backend.usecases;
 
 import boursier.louis.hermeez.backend.UserRepository;
 import boursier.louis.hermeez.backend.entities.User;
+import boursier.louis.hermeez.backend.security.UserDetailsCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,15 +40,5 @@ public class MongoUserOperations implements UserOperations {
             System.out.println("email already taken");
             return null;
         }
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repository.findByEmail(username);
-        if (user == null) {
-            throw new RuntimeException("User not found: " + username);
-        }
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Arrays.asList(authority));
     }
 }

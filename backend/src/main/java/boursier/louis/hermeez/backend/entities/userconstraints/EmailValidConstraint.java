@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend.userconstraints;
+package boursier.louis.hermeez.backend.entities.userconstraints;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
