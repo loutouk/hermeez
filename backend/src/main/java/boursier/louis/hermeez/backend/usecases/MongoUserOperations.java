@@ -3,11 +3,14 @@ package boursier.louis.hermeez.backend.usecases;
 import boursier.louis.hermeez.backend.UserRepository;
 import boursier.louis.hermeez.backend.apierror.ApiError;
 import boursier.louis.hermeez.backend.apierror.CustomRestExceptionHandler;
+import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
+import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
 import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,10 +32,10 @@ public class MongoUserOperations implements UserOperations {
      * @param email
      */
     @Override
-    public void updateToPremium(String email) {
+    public User updateToPremium(String email) {
         User user = repository.findByEmail(email);
         user.setRole(User.Role.PREMIUM);
-        repository.save(user);
+        return repository.save(user);
     }
 
     /**
@@ -47,8 +50,9 @@ public class MongoUserOperations implements UserOperations {
      * @param newPassword
      */
     @Override
-    public void updatePassword(String email, String newPassword) {
+    public User updatePassword(String email, String newPassword) {
         // TODO
+        return null;
     }
 
     /**
@@ -60,8 +64,9 @@ public class MongoUserOperations implements UserOperations {
      * @param newEmail
      */
     @Override
-    public void updateEmail(String newEmail) {
+    public User updateEmail(String newEmail) {
         // TODO
+        return null;
     }
 
     /**
@@ -74,15 +79,15 @@ public class MongoUserOperations implements UserOperations {
      *
      * @param email
      * @param password
-     * @return User object if authenticated, error message otherwise with 401 - Unauthorized.
+     * @return User object if authenticated, error message.
      */
     @Override
     public User signIn(String email, String password) {
         User user = repository.findByEmail(email);
-        if (user == null) { // user not found
-            return null;
-        } else if (!password.equals(user.getPassword())) { // password does not match the email
-            return null;
+        if (user == null || user.getPassword() == null || password == null) {
+            throw new WrongCredentialsException();
+        } else if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new WrongCredentialsException();
         } else {
             return user;
         }
@@ -96,16 +101,18 @@ public class MongoUserOperations implements UserOperations {
      *
      * @param email
      * @param password
-     * @return User object if success, error message otherwise with 200 - OK and an "email already taken" message.
+     * @return User object if success, error message otherwise.
      */
     @Override
-    public User register(String email, String password) {
+    public User register(String email, String password)  {
         User user = repository.findByEmail(email);
-        if (user == null) {
-            User u = new User(null, null, email, passwordEncoder.encode(password));
-            return repository.save(u);
+        if(email == null || password == null){
+            return null; // TODO find a better way to validate inputs
+        } else if (user != null) {
+            throw new EmailAlreadyTakenException(email);
         } else {
-            return null;
+            user = new User(null, null, email, passwordEncoder.encode(password));
+            return repository.save(user);
         }
     }
 }

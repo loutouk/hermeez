@@ -44,6 +44,11 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Injects the password encoder bean we defined earlier into our authentication provider.
+     * Defines and injects an authentication provider that references our details service.
+     * @return
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

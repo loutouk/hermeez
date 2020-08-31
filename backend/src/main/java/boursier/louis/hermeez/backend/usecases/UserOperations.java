@@ -10,11 +10,11 @@ import boursier.louis.hermeez.backend.entities.User;
  * Allows to abstract the chosen database system and the logic implementation from the business code.
  */
 public interface UserOperations {
-    void updateToPremium(String email);
+    User updateToPremium(String email);
 
-    void updatePassword(String email, String newPassword);
+    User updatePassword(String email, String newPassword);
 
-    void updateEmail(String newEmail);
+    User updateEmail(String newEmail);
 
     User signIn(String email, String password);
 

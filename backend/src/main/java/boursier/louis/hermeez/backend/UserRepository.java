@@ -16,7 +16,7 @@ import java.util.List;
  * if two fragments contribute the same method signature.
  * <p>
  * Extending the fragment interface with a repository interface combines the CRUD
- * and custom functionality and makes it available to clients.
+ * and custom functionality and makes it available to clients with the HATEOAS architecture.
  */
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
@@ -24,5 +24,4 @@ public interface UserRepository extends MongoRepository<User, String>, Customize
 
     User findByEmail(@Param("email") String email);
 
-    List<User> findByFirstName(@Param("name") String name);
 }

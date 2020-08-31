@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend;
 
+import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
 import boursier.louis.hermeez.backend.entities.User;
 import boursier.louis.hermeez.backend.usecases.UserOperations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.io.IOException;
 /**
  * Matches specified urls to manually defined functions.
  * Other auto generated URLs are available. See {@link boursier.louis.hermeez.backend.UserRepository}.
+ * Exceptions are handled separately. See {@link boursier.louis.hermeez.backend.apierror.CustomRestExceptionHandler}.
  */
 
 @RestController
@@ -23,31 +25,28 @@ public class Controller {
     @Autowired
     private UserOperations userOperations;
 
-    @PostMapping("/updateEmail")
+    @PostMapping("/updateemail")
     @PreAuthorize("authentication.principal == #email")
-    void updateEmail(@RequestParam String newEmail) {
-        userOperations.updateEmail(newEmail);
+    User updateEmail(@RequestParam String newEmail) {
+        // TODO fix
+        return userOperations.updateEmail(newEmail);
     }
 
-    @PostMapping("/updatePassword")
+    @PostMapping("/updatepassword")
     @PreAuthorize("authentication.principal == #email")
-    void updatePassword(@RequestParam String email, @RequestParam  String newPassword) {
-        userOperations.updatePassword(email, newPassword);
+    User updatePassword(@RequestParam String email, @RequestParam  String newPassword) {
+        return userOperations.updatePassword(email, newPassword);
     }
 
     @PostMapping("/updatetopremium")
     @PreAuthorize("authentication.principal == #email && (hasAuthority('USER') || !hasAuthority('PREMIUM'))")
-    void updateToPremium(@RequestParam(value = "email") String email) {
-        userOperations.updateToPremium(email);
+    User updateToPremium(@RequestParam(value = "email") String email) {
+        return userOperations.updateToPremium(email);
     }
 
     @PostMapping("/signin")
-    User signIn(@RequestParam String email, @RequestParam String password, HttpServletResponse response) throws IOException {
-        User user = userOperations.signIn(email, password);
-        if(user == null) {
-            response.getWriter().println("wrong credentials");
-        }
-        return user;
+    User signIn(@RequestParam String email, @RequestParam String password) {
+        return userOperations.signIn(email, password);
     }
 
     @PostMapping("/register")
