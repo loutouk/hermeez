@@ -1,17 +1,17 @@
 package boursier.louis.hermeez.backend;
 
-import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
 import boursier.louis.hermeez.backend.entities.User;
 import boursier.louis.hermeez.backend.usecases.UserOperations;
+import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * Matches specified urls to manually defined functions.
@@ -19,6 +19,7 @@ import java.io.IOException;
  * Exceptions are handled separately. See {@link boursier.louis.hermeez.backend.apierror.CustomRestExceptionHandler}.
  */
 
+@Validated
 @RestController
 public class Controller {
 
@@ -34,7 +35,7 @@ public class Controller {
 
     @PostMapping("/updatepassword")
     @PreAuthorize("authentication.principal == #email")
-    User updatePassword(@RequestParam String email, @RequestParam  String newPassword) {
+    User updatePassword(@RequestParam String email, @RequestParam String newPassword) {
         return userOperations.updatePassword(email, newPassword);
     }
 
@@ -45,12 +46,14 @@ public class Controller {
     }
 
     @PostMapping("/signin")
-    User signIn(@RequestParam String email, @RequestParam String password) {
+    User signIn(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
+                @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
         return userOperations.signIn(email, password);
     }
 
     @PostMapping("/register")
-    User register(@RequestParam String email, @RequestParam String password) {
+    User register(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
+                  @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
         return userOperations.register(email, password);
     }
 }

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Used to specify which exception handler to use when OAuth authentication fails.
  * See {@link boursier.louis.hermeez.backend.security.ServerSecurityConfig#configure(HttpSecurity)}.
- *
  */
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 

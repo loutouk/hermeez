@@ -47,6 +47,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Injects the password encoder bean we defined earlier into our authentication provider.
      * Defines and injects an authentication provider that references our details service.
+     *
      * @return
      */
     @Bean
@@ -72,7 +73,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
      * URL of the HATEOAS architecture have been auto generated with the MongoRepository interface.
      * Access to those endpoints should be regulated for security reasons.
      * TODO Only authorize admin role to access those endpoint, and authorize user & premium for the remaining ones
-     *
+     * <p>
      * When matching the specified patterns against an incoming request,
      * the matching is done in the order in which the elements are declared.
      * So the most specific matches patterns should come first and the most general should come last.

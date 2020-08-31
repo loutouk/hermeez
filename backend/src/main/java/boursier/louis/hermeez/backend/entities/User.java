@@ -2,7 +2,7 @@ package boursier.louis.hermeez.backend.entities;
 
 import boursier.louis.hermeez.backend.entities.userconstraints.EmailValidConstraint;
 import boursier.louis.hermeez.backend.entities.userconstraints.PasswordValidConstraint;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -12,6 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
+// TODO USER DTO (
+//  Never expose the Entities directly to the endpoint instead its better to have a wrapper
+//  i.e DTO that translates your entity to the required response.)
+
 @Document
 @Getter
 @Setter
@@ -19,39 +23,27 @@ public class User {
 
     @Id
     private String id;
-    private String firstName;
-    private String lastName;
     // TODO check database indexes and find out why the unique constraint does not work
-    @Indexed(unique = true) // Creates an index on the email for faster queries as it is often used as an id
     @Valid
+    @NotEmpty
+    // Creates an index on the email for faster queries as it is often used as an id
+    @Indexed(unique = true)
     @EmailValidConstraint
     private String email;
+    @Valid
     @NotEmpty
-    @JsonIgnore
     @PasswordValidConstraint
+    // Fall back security measure. Prevents from accidentally (DTO role) returning the password (security reasons)
+    // but allows for User creation (registration)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private Role role;
 
-    public User(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String email, String password) {
         this.email = email;
         this.password = password;
         this.role = Role.USER;
     }
 
-    // TODO remove in prod
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
-    }
-
-    public enum Role {USER, PREMIUM}
+    public enum Role {USER, PREMIUM, OMNISCIENT}
 }

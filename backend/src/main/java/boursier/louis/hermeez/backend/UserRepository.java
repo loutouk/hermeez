@@ -5,10 +5,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import java.util.List;
-
 /**
- * This class delivers auto generated CRUD operations on the chosen entity thanks to the MongoRepository interface.
+ * At runtime, Spring Data REST automatically creates an implementation of this interface.
+ * Then it uses the @RepositoryRestResource annotation to direct Spring MVC to create RESTful endpoints at /users.
+ * This will automatically generate CRUD operations on the chosen POJO User.
  * <p>
  * Repositories may be enhanced with multiple custom implementations.
  * Custom implementations have a higher priority than the base implementation and repository aspects.
