@@ -4,7 +4,6 @@ import boursier.louis.hermeez.backend.entities.User;
 import boursier.louis.hermeez.backend.usecases.UserOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,36 +23,22 @@ public class Controller {
     @Autowired
     private UserOperations userOperations;
 
-    @GetMapping("/forpremium")
-    @PreAuthorize("hasAuthority('PREMIUM')")
-    String forPremium(@RequestParam String email, OAuth2Authentication authentication) {
-        return "For premium only.";
-    }
-
-    @GetMapping("/foruser")
-    @PreAuthorize("hasAuthority('USER') || hasAuthority('PREMIUM')")
-    String forUser() {
-        return "For all users.";
-    }
-
-    @GetMapping("/updateEmail")
+    @PostMapping("/updateEmail")
     @PreAuthorize("authentication.principal == #email")
-    String updateEmail() {
-        // TODO
-        return "todo update email";
+    void updateEmail(@RequestParam String newEmail) {
+        userOperations.updateEmail(newEmail);
+    }
+
+    @PostMapping("/updatePassword")
+    @PreAuthorize("authentication.principal == #email")
+    void updatePassword(@RequestParam String email, @RequestParam  String newPassword) {
+        userOperations.updatePassword(email, newPassword);
     }
 
     @PostMapping("/updatetopremium")
-    @PreAuthorize("hasAuthority('USER') || !hasAuthority('PREMIUM')")
-    String updateToPremium(@RequestParam(value = "email") String email) {
+    @PreAuthorize("authentication.principal == #email && (hasAuthority('USER') || !hasAuthority('PREMIUM'))")
+    void updateToPremium(@RequestParam(value = "email") String email) {
         userOperations.updateToPremium(email);
-        return "Role updated to premium.";
-    }
-
-    @GetMapping("/test")
-    String test(OAuth2Authentication authentication) {
-        System.out.println(authentication.getPrincipal().toString());
-        return "Test.";
     }
 
     @PostMapping("/signin")

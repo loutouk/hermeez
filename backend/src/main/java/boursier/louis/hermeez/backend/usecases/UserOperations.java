@@ -12,6 +12,10 @@ import boursier.louis.hermeez.backend.entities.User;
 public interface UserOperations {
     void updateToPremium(String email);
 
+    void updatePassword(String email, String newPassword);
+
+    void updateEmail(String newEmail);
+
     User signIn(String email, String password);
 
     User register(String email, String password);
