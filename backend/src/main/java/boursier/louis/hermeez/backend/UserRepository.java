@@ -20,6 +20,8 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserRepository extends MongoRepository<User, String>, CustomizedUserService {
 
+    // TODO remove auto generated rest ednpoint (export = false)
+    // https://stackoverflow.com/questions/42506546/spring-data-rest-is-there-a-way-to-restrict-the-supported-operations
     User findByEmail(@Param("email") String email);
 
 }
