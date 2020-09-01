@@ -3,6 +3,8 @@ package boursier.louis.hermeez.backend;
 import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * Mongo specific interface for generic CRUD operations on a repository for the specific User type.
@@ -18,10 +20,16 @@ import org.springframework.data.repository.query.Param;
  * Extending the fragment interface with a repository interface combines the CRUD
  * and custom functionality and makes it available to clients with the HATEOAS architecture.
  */
+@RepositoryRestResource(collectionResourceRel = "users", path = "users", exported = true)
 public interface UserRepository extends MongoRepository<User, String>, CustomizedUserService {
 
-    // TODO remove auto generated rest ednpoint (export = false)
-    // https://stackoverflow.com/questions/42506546/spring-data-rest-is-there-a-way-to-restrict-the-supported-operations
     User findByEmail(@Param("email") String email);
+    /*@PreAuthorize("authentication.principal == #email")
+    User getUser(User user);*/
+    /*@PreAuthorize("authentication.principal == #email")
+    User save(User user);*/
+    @PreAuthorize("hasAuthority('OMINSCIENT') or authentication.principal.equals(#user.email)")
+    void delete(User user);
+    // TODO not export findAll
 
 }

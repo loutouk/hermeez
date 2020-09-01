@@ -3,9 +3,16 @@ package boursier.louis.hermeez.backend.security;
 
 import boursier.louis.hermeez.backend.apierror.CustomAccessDeniedHandler;
 import boursier.louis.hermeez.backend.apierror.CustomAuthenticationEntryPoint;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,10 +21,19 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.stereotype.Component;
 
+import java.security.Principal;
+
+@Order(1)
 @Configuration
 /**
  * EnableWebSecurity will provide configuration via HttpSecurity on the url pattern level.
@@ -31,7 +47,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * because controllers are usually classes, not implementing any interfaces.
  * See {@link boursier.louis.hermeez.backend.Controller}.
  */
-@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -44,12 +61,6 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-    /**
-     * Injects the password encoder bean we defined earlier into our authentication provider.
-     * Defines and injects an authentication provider that references our details service.
-     *
-     * @return
-     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -70,6 +81,18 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * Restrict Spring Data REST endpoints access to their owner only.
+     * See {@link boursier.louis.hermeez.backend.UserRepository}.
+     */
+    @Component("userSecurity")
+    public class UserSecurity { public boolean hasUserId(Principal principal, String userId) {
+            System.out.println(principal.getName());
+            System.out.println(userId);
+            return true;
+        }
+    }
+
+    /**
      * URL of the HATEOAS architecture have been auto generated with the MongoRepository interface.
      * Access to those endpoints should be regulated for security reasons.
      * TODO Only authorize admin role to access those endpoint, and authorize user & premium for the remaining ones
@@ -86,14 +109,32 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
+                // TEST
+                .authorizeRequests()
+                .antMatchers("/")
+                .permitAll()
+                .and()
+
+                // TEST
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/users")
+                .permitAll()
+                .and()
+
+                .authorizeRequests()
+                .antMatchers("/users/{userId}")
+                .access("@userSecurity.hasUserId(authentication,#userId)")
+                .and()
+
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
+                .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
     }
 
