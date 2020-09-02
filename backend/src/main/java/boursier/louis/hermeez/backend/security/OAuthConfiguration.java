@@ -15,7 +15,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 
 @Configuration
 @EnableAuthorizationServer
-@EnableResourceServer
 public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
@@ -24,27 +23,18 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final UserDetailsService userService;
 
-    // TODO set more secure credentials
     @Value("${jwt.clientId:myclientid}")
     private String clientId;
 
-    // TODO use https with security.jwt
-    // TODO set more secure credentials
     @Value("${jwt.client-secret:mysecret}")
     private String clientSecret;
 
-    // TODO set more secure credentials
-    @Value("${jwt.signing-key:Zf68eADg4g635yh7t4h36GR4g7889tDGF}")
-    private String jwtSigningKey;
-
-    // TODO reduce time (ideal is 15min) and do research on how to use the refresh token (automated by spring sec?)
     @Value("${jwt.accessTokenValidititySeconds:43200}") // 12 hours
     private int accessTokenValiditySeconds;
 
     @Value("${jwt.authorizedGrantTypes:password,authorization_code,refresh_token}")
     private String[] authorizedGrantTypes;
 
-    // TODO check if length is reasonable
     @Value("${jwt.refreshTokenValiditySeconds:2592000}") // 30 days
     private int refreshTokenValiditySeconds;
 
@@ -54,13 +44,6 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
         this.userService = userService;
     }
 
-    /**
-     * OAuth tokens are stored in memory/ram hence lost when the server is shut down.
-     * Set with clients.inMemory() instead of implementing a persistent token management with clients.jdbc().
-     *
-     * @param clients
-     * @throws Exception
-     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
@@ -69,15 +52,10 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
-                .scopes("read", "write");
+                .scopes("read", "write")
+                .resourceIds("api");
     }
 
-    /**
-     * Define the use of a JWT token with accessTokenConverter
-     * Define the use of an UserDetailsService and AuthenticationManager interfaces to perform authentication
-     *
-     * @param endpoints
-     */
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
