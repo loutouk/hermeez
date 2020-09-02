@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend.security;
 
+import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +54,7 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
                 .scopes("read", "write")
-                .resourceIds("api");
+                .resourceIds(Constants.API_NAME);
     }
 
     @Override

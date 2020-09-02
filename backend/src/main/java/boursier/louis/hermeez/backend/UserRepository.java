@@ -3,8 +3,12 @@ package boursier.louis.hermeez.backend;
 import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Mongo specific interface for generic CRUD operations on a repository for the specific User type.
@@ -20,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Extending the fragment interface with a repository interface combines the CRUD
  * and custom functionality and makes it available to clients with the HATEOAS architecture.
  */
-@RequestMapping("/api")
 public interface UserRepository extends MongoRepository<User, String> {
 
     @RestResource(exported = false)
     User findByEmail(@Param("email") String email);
-
+    //@RestResource(exported = false)
+    List<User> findAll();
 }

@@ -2,6 +2,7 @@ package boursier.louis.hermeez.backend.security;
 
 import boursier.louis.hermeez.backend.apierror.CustomAccessDeniedHandler;
 import boursier.louis.hermeez.backend.apierror.CustomAuthenticationEntryPoint;
+import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,7 +21,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.resourceId("api");
+        resources.resourceId(Constants.API_NAME);
     }
 
     @Override
@@ -28,13 +29,16 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .antMatcher("/api/**")
+                .antMatcher("/" + Constants.API_NAME + "/**")
                 .authorizeRequests()
-                .antMatchers("/api/signin", "/api/register", "/api/test").permitAll()
-                .antMatchers("/api/updatetopremium").hasAuthority("USER")
-                .antMatchers("/api/updateemail").hasAuthority("PREMIUM")
-                .antMatchers("/api/**").authenticated()
-                .antMatchers("/users", "/users/**").hasAuthority("OMNISCIENT")
+                .antMatchers(
+                        "/" + Constants.API_NAME + "/signin",
+                        "/" + Constants.API_NAME + "/register",
+                        "/" + Constants.API_NAME + "/test").permitAll()
+                .antMatchers("/" + Constants.API_NAME + "/updatetopremium").hasAuthority("USER")
+                .antMatchers("/" + Constants.API_NAME + "/updateemail").hasAuthority("PREMIUM")
+                .antMatchers("/" + Constants.API_NAME + "/**").authenticated()
+                .antMatchers("/" + Constants.API_NAME + "/users", "/" + Constants.API_NAME + "/users/**").hasAuthority("OMNISCIENT")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());

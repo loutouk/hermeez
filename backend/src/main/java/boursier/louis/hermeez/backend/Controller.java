@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constants.API_NAME)
 @Validated
 public class Controller {
 
