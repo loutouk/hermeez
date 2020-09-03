@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend;
+package boursier.louis.hermeez.backend.controllers;
 
 import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -26,6 +26,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     @RestResource(exported = false)
     User findByEmail(@Param("email") String email);
 
-    //@RestResource(exported = false)
+    @RestResource(exported = false)
+    @Override
     List<User> findAll();
 }

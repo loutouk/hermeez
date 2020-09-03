@@ -1,6 +1,9 @@
 package boursier.louis.hermeez.backend.utils;
 
 public class PasswordValidation {
+    private PasswordValidation() {
+    }
+
     public static boolean isValidPassword(String password) {
         return password != null &&
                 password.length() >= Constants.PASSWD_MIN_LENGTH &&

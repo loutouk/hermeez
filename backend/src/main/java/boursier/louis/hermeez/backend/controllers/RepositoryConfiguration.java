@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend;
+package boursier.louis.hermeez.backend.controllers;
 
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 /**
  * Changes the default base bath of the CRUD User repository by prepending our API name to it.
- * See {@link boursier.louis.hermeez.backend.UserRepository}.
+ * See {@link UserRepository}.
  * This allows for applying security filter on this repository and regulate its access.
  * See {@link boursier.louis.hermeez.backend.security.ResourceServerConfiguration}.
  */

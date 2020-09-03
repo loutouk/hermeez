@@ -1,17 +1,19 @@
 package boursier.louis.hermeez.backend.usecases;
 
-import boursier.louis.hermeez.backend.UserRepository;
 import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
 import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
+import boursier.louis.hermeez.backend.controllers.UserRepository;
 import boursier.louis.hermeez.backend.entities.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MongoUserOperations implements UserOperations {
 
+    private static final Logger LOGGER = LogManager.getLogger(MongoUserOperations.class);
     @Autowired
     private UserRepository repository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -27,7 +29,12 @@ public class MongoUserOperations implements UserOperations {
     @Override
     public User updateToPremium(String email) {
         User user = repository.findByEmail(email);
+        if (user == null) {
+            LOGGER.error("User " + email + " tried to upgrade to premium but email was not found");
+            throw new WrongCredentialsException();
+        }
         user.setRole(User.Role.PREMIUM);
+        LOGGER.info("User " + email + " upgraded to premium");
         return repository.save(user);
     }
 
@@ -45,6 +52,7 @@ public class MongoUserOperations implements UserOperations {
     @Override
     public User updatePassword(String email, String newPassword) {
         // TODO
+        LOGGER.info("Password of user " + email + " updated");
         return null;
     }
 
@@ -58,8 +66,9 @@ public class MongoUserOperations implements UserOperations {
      * @param newEmail
      */
     @Override
-    public User updateEmail(String newEmail) {
+    public User updateEmail(String email, String newEmail) {
         // TODO
+        LOGGER.info("Email of user " + email + " updated to " + newEmail);
         return null;
     }
 
@@ -79,10 +88,13 @@ public class MongoUserOperations implements UserOperations {
     public User signIn(String email, String password) {
         User user = repository.findByEmail(email);
         if (user == null) {
+            LOGGER.error("User " + email + " tried to sign in but email was not found");
             throw new WrongCredentialsException();
         } else if (!passwordEncoder.matches(password, user.getPassword())) {
+            LOGGER.error("User " + email + " tried to sign in but credentials were invalid");
             throw new WrongCredentialsException();
         } else {
+            LOGGER.info("User " + email + " signed in");
             return user;
         }
     }

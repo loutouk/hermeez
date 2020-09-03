@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring Boot automatically configures Log4j if it finds a file named log4j2.xml -->
+<Configuration status="debug" monitorInterval="30">
+
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+        </Property>
+    </Properties>
+
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            # Pattern of log message for console appender
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <RollingFile name="FileAppender" fileName="logs/log4j2.log"
+                     filePattern="logs/log4j2-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            # specifies the maximum number of log files that will be kep
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        # async log to not block the app
+        <AsyncLogger name="boursier.louis.hermeez.backend.logging.log4j" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="FileAppender" />
+        </AsyncLogger>
+    </Loggers>
+</Configuration>

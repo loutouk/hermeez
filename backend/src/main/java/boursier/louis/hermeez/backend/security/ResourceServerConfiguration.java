@@ -1,7 +1,7 @@
 package boursier.louis.hermeez.backend.security;
 
-import boursier.louis.hermeez.backend.apierror.CustomAccessDeniedHandler;
-import boursier.louis.hermeez.backend.apierror.CustomAuthenticationEntryPoint;
+import boursier.louis.hermeez.backend.apierror.oauth.CustomAccessDeniedHandler;
+import boursier.louis.hermeez.backend.apierror.oauth.CustomAuthenticationEntryPoint;
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

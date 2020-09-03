@@ -1,6 +1,9 @@
 package boursier.louis.hermeez.backend.utils;
 
 public class EmailValidation {
+    private EmailValidation() {
+    }
+
     public static boolean isValidEmail(String email) {
         return email != null &&
                 email.length() >= Constants.EMAIL_MIN_LENGTH &&

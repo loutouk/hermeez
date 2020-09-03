@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend;
+package boursier.louis.hermeez.backend.config;
 
 import boursier.louis.hermeez.backend.entities.User;
 import org.springframework.context.annotation.Bean;

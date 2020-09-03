@@ -33,4 +33,7 @@ public class Constants {
     public static final int PASSWD_MAX_LENGTH = 100;
     public static final int EMAIL_MIN_LENGTH = 2;
     public static final int EMAIL_MAX_LENGTH = 36;
+
+    private Constants() {
+    }
 }
