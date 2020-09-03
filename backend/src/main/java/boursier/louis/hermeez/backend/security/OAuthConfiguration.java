@@ -10,12 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
+// The service handling authorization process, the middleman between client and resource owner
 public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
@@ -24,19 +24,20 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final UserDetailsService userService;
 
-    @Value("${jwt.clientId:myclientid}")
+    @Value("${jwt.clientId:" + Constants.JWT_CLIENT_ID + "}")
     private String clientId;
 
-    @Value("${jwt.client-secret:mysecret}")
+    @Value("${jwt.client-secret:" + Constants.JWT_CLIENT_SECRET + "}")
     private String clientSecret;
 
-    @Value("${jwt.accessTokenValidititySeconds:43200}") // 12 hours
+    @Value("${jwt.accessTokenValidititySeconds:" + Constants.ACCESS_TOKEN_VALIDITY_SECONDS + "}")
     private int accessTokenValiditySeconds;
 
+    // Because we are both the resource server and resource owner, we can use the OAuth password grant flow
     @Value("${jwt.authorizedGrantTypes:password,authorization_code,refresh_token}")
     private String[] authorizedGrantTypes;
 
-    @Value("${jwt.refreshTokenValiditySeconds:2592000}") // 30 days
+    @Value("${jwt.refreshTokenValiditySeconds:" + Constants.REFRESH_TOKEN_VALIDITY_SECONDS + "}")
     private int refreshTokenValiditySeconds;
 
     public OAuthConfiguration(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserDetailsService userService) {
@@ -53,10 +54,18 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
-                .scopes("read", "write")
+                .scopes(Constants.HERMEEZ_MOBILE_APP_SCOPE)
                 .resourceIds(Constants.API_NAME);
     }
 
+
+    /**
+     * Authorization server endpoint.
+     * Define the use of a JWT token with accessTokenConverter.
+     * Define the use of an UserDetService and AuthManager interfaces to perform authentication (as resource owner).
+     *
+     * @param endpoints
+     */
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints

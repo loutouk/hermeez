@@ -12,12 +12,10 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
  * See {@link boursier.louis.hermeez.backend.security.ResourceServerConfiguration}.
  */
 @Configuration
-public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter
-{
+public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
 
     @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config)
-    {
+    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setBasePath("/" + Constants.API_NAME);
     }
 }

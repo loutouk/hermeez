@@ -4,7 +4,6 @@ import boursier.louis.hermeez.backend.entities.User;
 import boursier.louis.hermeez.backend.usecases.UserOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,30 +28,30 @@ public class Controller {
     private UserOperations userOperations;
 
     @PostMapping("/updateemail")
-    //@PreAuthorize("authentication.principal == #email")
+        //@PreAuthorize("authentication.principal == #email")
     User updateEmail(@RequestParam String newEmail) {
         // TODO fix
         return userOperations.updateEmail(newEmail);
     }
 
     @PostMapping("/updatepassword")
-    //@PreAuthorize("authentication.principal == #email")
+        //@PreAuthorize("authentication.principal == #email")
     User updatePassword(@RequestParam String email, @RequestParam String newPassword) {
         return userOperations.updatePassword(email, newPassword);
     }
 
     @PostMapping("/updatetopremium")
-    //@PreAuthorize("authentication.principal == #email && (hasAuthority('USER') || !hasAuthority('PREMIUM'))")
+        //@PreAuthorize("authentication.principal == #email && (hasAuthority('USER') || !hasAuthority('PREMIUM'))")
     User updateToPremium(@RequestParam(value = "email") String email, Authentication authentication, HttpServletRequest request) {
-        if(authentication!=null) System.out.println(authentication.getName());
-        if(request.getUserPrincipal()!=null) System.out.println(request.getUserPrincipal());
+        if (authentication != null) System.out.println(authentication.getName());
+        if (request.getUserPrincipal() != null) System.out.println(request.getUserPrincipal());
         return userOperations.updateToPremium(email);
     }
 
     @GetMapping("/test")
     String test(Authentication authentication, HttpServletRequest request) {
-        if(authentication!=null) System.out.println(authentication.getName());
-        if(request.getUserPrincipal()!=null) System.out.println(request.getUserPrincipal());
+        if (authentication != null) System.out.println(authentication.getName());
+        if (request.getUserPrincipal() != null) System.out.println(request.getUserPrincipal());
         return "test";
     }
 
