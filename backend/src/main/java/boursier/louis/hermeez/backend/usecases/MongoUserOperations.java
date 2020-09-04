@@ -51,9 +51,16 @@ public class MongoUserOperations implements UserOperations {
      */
     @Override
     public User updatePassword(String email, String newPassword) {
-        // TODO
-        LOGGER.info("Password of user " + email + " updated");
-        return null;
+        User user = repository.findByEmail(email);
+        if (user == null) {
+            LOGGER.error("User " + email + " tried to update password but email was not found");
+            throw new WrongCredentialsException();
+        } else {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user = repository.save(user);
+            LOGGER.info("User " + email + " changed its password");
+            return user;
+        }
     }
 
     /**
@@ -67,9 +74,16 @@ public class MongoUserOperations implements UserOperations {
      */
     @Override
     public User updateEmail(String email, String newEmail) {
-        // TODO
-        LOGGER.info("Email of user " + email + " updated to " + newEmail);
-        return null;
+        User user = repository.findByEmail(email);
+        if (user == null) {
+            LOGGER.error("User " + email + " tried to update email but email was not found");
+            throw new WrongCredentialsException();
+        } else {
+            user.setEmail(newEmail);
+            user = repository.save(user);
+            LOGGER.info("User " + email + " changed its email with " + newEmail);
+            return user;
+        }
     }
 
     /**
@@ -88,7 +102,7 @@ public class MongoUserOperations implements UserOperations {
     public User signIn(String email, String password) {
         User user = repository.findByEmail(email);
         if (user == null) {
-            LOGGER.error("User " + email + " tried to sign in but email was not found");
+            LOGGER.error("User " + email + " tried to sign in but credentials were invalid");
             throw new WrongCredentialsException();
         } else if (!passwordEncoder.matches(password, user.getPassword())) {
             LOGGER.error("User " + email + " tried to sign in but credentials were invalid");
@@ -113,10 +127,13 @@ public class MongoUserOperations implements UserOperations {
     public User register(String email, String password) {
         User user = repository.findByEmail(email);
         if (user != null) {
+            LOGGER.error("User " + email + " tried to register but email was already taken");
             throw new EmailAlreadyTakenException(email);
         } else {
             user = new User(email, passwordEncoder.encode(password));
-            return repository.save(user);
+            user = repository.save(user);
+            LOGGER.info("User " + email + " registered");
+            return user;
         }
     }
 }
