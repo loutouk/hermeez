@@ -1,15 +1,15 @@
-package boursier.louis.hermeez.backend.entities.userconstraints;
+package boursier.louis.hermeez.backend.entities.user.userconstraints;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = EmailValidator.class)
+@Constraint(validatedBy = PasswordValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EmailValidConstraint {
-    String message() default "email is not valid";
+public @interface PasswordValidConstraint {
+    String message() default "password is not valid";
 
     Class<?>[] groups() default {};
 

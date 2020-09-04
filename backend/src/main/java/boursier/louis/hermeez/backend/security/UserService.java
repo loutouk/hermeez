@@ -2,7 +2,7 @@ package boursier.louis.hermeez.backend.security;
 
 
 import boursier.louis.hermeez.backend.controllers.UserRepository;
-import boursier.louis.hermeez.backend.entities.User;
+import boursier.louis.hermeez.backend.entities.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend.entities.userconstraints;
+package boursier.louis.hermeez.backend.entities.user.userconstraints;
 
 import boursier.louis.hermeez.backend.utils.PasswordValidation;
 

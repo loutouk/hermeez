@@ -17,6 +17,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
-        OAuthErrorHandler.handle(e.getClass().getName(), httpServletResponse);
+        OAuthErrorWriter.handle(e.getClass().getName(), httpServletResponse);
     }
 }

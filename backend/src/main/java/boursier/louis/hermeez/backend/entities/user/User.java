@@ -1,7 +1,7 @@
-package boursier.louis.hermeez.backend.entities;
+package boursier.louis.hermeez.backend.entities.user;
 
-import boursier.louis.hermeez.backend.entities.userconstraints.EmailValidConstraint;
-import boursier.louis.hermeez.backend.entities.userconstraints.PasswordValidConstraint;
+import boursier.louis.hermeez.backend.entities.user.userconstraints.EmailValidConstraint;
+import boursier.louis.hermeez.backend.entities.user.userconstraints.PasswordValidConstraint;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;

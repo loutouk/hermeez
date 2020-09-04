@@ -1,6 +1,6 @@
 package boursier.louis.hermeez.backend.security;
 
-import boursier.louis.hermeez.backend.entities.User;
+import boursier.louis.hermeez.backend.entities.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Extension of the UserDetails class that is used for returning user data when they are authenticated.
+ * Gives more control on how and what data is returned.
  * {@link boursier.louis.hermeez.backend.security.UserService#loadUserByUsername(String)}.
  */
 public class UserDetailsCustom implements UserDetails {

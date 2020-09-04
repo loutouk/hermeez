@@ -15,11 +15,14 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
         <RollingFile name="FileAppender" fileName="logs/log4j2.log"
-                     filePattern="logs/log4j2-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="logs/${date:yyyy-MM}/log4j2-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
             <Policies>
+                # create new file for each day (1)
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                # or as soon as file size reaches 10MB
                 <SizeBasedTriggeringPolicy size="10MB" />
             </Policies>
             # specifies the maximum number of log files that will be kep

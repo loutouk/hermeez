@@ -16,6 +16,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException {
-        OAuthErrorHandler.handle(e.getClass().getName(), httpServletResponse);
+        OAuthErrorWriter.handle(e.getClass().getName(), httpServletResponse);
     }
 }

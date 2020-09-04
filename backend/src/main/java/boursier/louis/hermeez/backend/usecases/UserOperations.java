@@ -1,7 +1,7 @@
 package boursier.louis.hermeez.backend.usecases;
 
 import boursier.louis.hermeez.backend.controllers.UserRepository;
-import boursier.louis.hermeez.backend.entities.User;
+import boursier.louis.hermeez.backend.entities.user.User;
 
 /**
  * Describes which operations the User entity requires in addition to CRUD operations on the User

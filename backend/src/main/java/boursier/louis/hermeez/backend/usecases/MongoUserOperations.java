@@ -3,7 +3,7 @@ package boursier.louis.hermeez.backend.usecases;
 import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
 import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
 import boursier.louis.hermeez.backend.controllers.UserRepository;
-import boursier.louis.hermeez.backend.entities.User;
+import boursier.louis.hermeez.backend.entities.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

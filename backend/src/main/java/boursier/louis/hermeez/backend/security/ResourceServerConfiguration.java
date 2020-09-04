@@ -14,11 +14,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @Configuration
 @EnableResourceServer // The service who actually supplies the resources
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    public ResourceServerConfiguration(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
-        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
-    }
 
     /**
      * Definition of resource identification in order to match the client’s access defined in OAuthConfiguration.
@@ -54,7 +49,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/" + Constants.API_NAME + "/users", "/" + Constants.API_NAME + "/users/**").hasAuthority("OMNISCIENT")
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint()).accessDeniedHandler(new CustomAccessDeniedHandler());
     }
 
 }

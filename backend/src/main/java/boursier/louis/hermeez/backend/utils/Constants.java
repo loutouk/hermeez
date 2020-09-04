@@ -16,9 +16,9 @@ public class Constants {
     // as anybody could decompile the mobile app and extract those credentials and use it for basic authentication.
     public static final String JWT_CLIENT_ID = "hermeezmobileapp";
     public static final String JWT_CLIENT_SECRET = "fR90Yf9RefTH20dRTZ0";
-    // Short lived access token (12 hours)
+    // Short lived access token
     public static final int ACCESS_TOKEN_VALIDITY_SECONDS = 43200;
-    // Long lived refresh token (30 days)
+    // Long lived refresh token
     public static final int REFRESH_TOKEN_VALIDITY_SECONDS = 2592000;
     // Scopes are irrelevant because we only have one type of usage (the mobile app)
     // We set a dummy one as Spring requires it even though it is optional for OAuth
