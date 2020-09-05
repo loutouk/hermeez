@@ -87,11 +87,7 @@ public class ControllerTest {
         WebClient.RequestHeadersSpec<?> request = WebClient.create()
                 .method(HttpMethod.POST)
                 .uri(registerUserUrl)
-                .body(inserter)
-                .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-                .acceptCharset(Charset.forName("UTF-8"))
-                .ifNoneMatch("*")
-                .ifModifiedSince(ZonedDateTime.now());
+                .body(inserter);
 
         String response = request.exchange().block().bodyToMono(String.class).block();
 
@@ -111,11 +107,7 @@ public class ControllerTest {
         WebClient.RequestHeadersSpec<?> request = WebClient.create()
                 .method(HttpMethod.POST)
                 .uri(registerUserUrl)
-                .body(inserter)
-                .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-                .acceptCharset(Charset.forName("UTF-8"))
-                .ifNoneMatch("*")
-                .ifModifiedSince(ZonedDateTime.now());
+                .body(inserter);
 
         /**
          * Pay attention to the bodyToMono method,
@@ -141,11 +133,7 @@ public class ControllerTest {
         WebClient.RequestHeadersSpec<?> request = WebClient.create()
                 .method(HttpMethod.POST)
                 .uri(registerUserUrl)
-                .body(inserter)
-                .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-                .acceptCharset(Charset.forName("UTF-8"))
-                .ifNoneMatch("*")
-                .ifModifiedSince(ZonedDateTime.now());
+                .body(inserter);
 
         String response = request.exchange().block().bodyToMono(String.class).block();
 
