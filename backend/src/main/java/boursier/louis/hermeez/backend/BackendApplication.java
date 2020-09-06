@@ -1,7 +1,7 @@
 package boursier.louis.hermeez.backend;
 
-import boursier.louis.hermeez.backend.controllers.Controller;
-import boursier.louis.hermeez.backend.controllers.UserRepository;
+import boursier.louis.hermeez.backend.controllers.user.UserController;
+import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +14,7 @@ public class BackendApplication implements CommandLineRunner {
     private UserRepository repository;
 
     @Autowired
-    private Controller controller;
+    private UserController controller;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Handles exceptions for all controllers with @Controller or @RestController.
+ * Handles exceptions for all controllers with @UserController or @RestController.
  * The implementations of overridden exceptions and custom (@ExceptionHandler) exceptions are found here.
  * We specify that Spring should use this implementation first with @Order(Ordered.HIGHEST_PRECEDENCE).
  */

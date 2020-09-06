@@ -1,8 +1,8 @@
-package boursier.louis.hermeez.backend.usecases;
+package boursier.louis.hermeez.backend.usecases.user;
 
 import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
 import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
-import boursier.louis.hermeez.backend.controllers.UserRepository;
+import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.entities.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,7 +46,6 @@ public class MongoUserOperations implements UserOperations {
      * OWASP Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html
      *
      * @param email
-     * @param oldPassword
      * @param newPassword
      */
     @Override

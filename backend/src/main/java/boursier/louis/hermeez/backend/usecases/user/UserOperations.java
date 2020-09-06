@@ -1,6 +1,6 @@
-package boursier.louis.hermeez.backend.usecases;
+package boursier.louis.hermeez.backend.usecases.user;
 
-import boursier.louis.hermeez.backend.controllers.UserRepository;
+import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.entities.user.User;
 
 /**

@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend.controllers;
 
+import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;

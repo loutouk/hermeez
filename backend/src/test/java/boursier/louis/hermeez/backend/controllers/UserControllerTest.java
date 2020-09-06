@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend.controllers;
 
+import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.utils.Constants;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,8 +21,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.TcpClient;
 
-import java.nio.charset.Charset;
-import java.time.ZonedDateTime;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
  * Test server should be running on the matching port (8080) for those tests to run
  */
 @SpringBootTest
-public class ControllerTest {
+public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;

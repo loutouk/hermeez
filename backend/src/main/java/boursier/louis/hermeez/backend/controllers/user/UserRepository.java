@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend.controllers;
+package boursier.louis.hermeez.backend.controllers.user;
 
 import boursier.louis.hermeez.backend.entities.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

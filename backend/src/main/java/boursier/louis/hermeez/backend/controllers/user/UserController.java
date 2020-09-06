@@ -1,8 +1,8 @@
-package boursier.louis.hermeez.backend.controllers;
+package boursier.louis.hermeez.backend.controllers.user;
 
 import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.entities.user.UserDTO;
-import boursier.louis.hermeez.backend.usecases.UserOperations;
+import boursier.louis.hermeez.backend.usecases.user.UserOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,9 +27,9 @@ import javax.validation.constraints.Size;
 @RestController
 @RequestMapping(Constants.API_NAME)
 @Validated
-public class Controller {
+public class UserController {
 
-    private static final Logger LOGGER = LogManager.getLogger(Controller.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @Autowired
     private UserOperations userOperations;

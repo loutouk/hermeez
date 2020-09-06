@@ -1,9 +1,8 @@
 package boursier.louis.hermeez.backend.security;
 
-import boursier.louis.hermeez.backend.controllers.UserRepository;
+import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.utils.Constants;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelOption;
@@ -14,23 +13,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.TcpClient;
 
-import java.nio.charset.Charset;
-import java.time.ZonedDateTime;
 import java.util.concurrent.TimeUnit;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -211,6 +204,42 @@ public class ResourceServerConfigurationTest {
     }
 
     @Test
+    public void accessBaseUrlWithBadTokenShouldReturnInvalidToken() throws Exception {
+
+        // registers the user
+        String registerUserUrl = "http://localhost:8080/" + Constants.API_NAME + "/register";
+        LinkedMultiValueMap map = new LinkedMultiValueMap();
+        map.add("email", email);
+        map.add("password", password);
+        BodyInserters.MultipartInserter inserter = BodyInserters.fromMultipartData(map);
+        WebClient.RequestHeadersSpec<?> request = WebClient.create()
+                .method(HttpMethod.POST)
+                .uri(registerUserUrl)
+                .body(inserter);
+        request.exchange().block().bodyToMono(String.class).block();
+
+        // makes the request with a bad token
+        String accessToken = Base64Utils.encodeToString(("badOAuthToken").getBytes());
+        String baseUrl = "http://localhost:8080/" + Constants.API_NAME + "/";
+        map.clear();
+        map.add("email", email);
+        map.add("password", password);
+        inserter = BodyInserters.fromMultipartData(map);
+
+        request = WebClient.create()
+                .method(HttpMethod.GET)
+                .uri(baseUrl)
+                .headers(headers -> headers.setBearerAuth(accessToken))
+                .body(inserter);
+
+        String response = request.exchange().block().bodyToMono(String.class).block();
+        assertNotNull(response);
+        JsonNode root = objectMapper.readTree(response);
+        assertEquals(true, root.has("error"));
+        assertEquals("invalid_token", root.path("error").asText());
+    }
+
+    @Test
     public void accessBaseUrlWithGoodTokenShouldReturnWebPage() throws Exception {
 
         // registers the user
@@ -225,7 +254,7 @@ public class ResourceServerConfigurationTest {
                 .body(inserter);
         request.exchange().block().bodyToMono(String.class).block();
 
-        // get the token
+        // gets the token
         map.clear();
         map.add("grant_type", "password");
         map.add("scope", Constants.HERMEEZ_MOBILE_APP_SCOPE);
@@ -244,7 +273,7 @@ public class ResourceServerConfigurationTest {
         JsonNode root = objectMapper.readTree(response);
         assertEquals(true, root.has("access_token"));
 
-        // make the request with the token
+        // makes the request with the valid token
         String accessToken = root.path("access_token").asText();
         String baseUrl = "http://localhost:8080/" + Constants.API_NAME + "/";
         map.clear();
@@ -263,7 +292,5 @@ public class ResourceServerConfigurationTest {
         root = objectMapper.readTree(response);
         assertEquals(true, root.has("_links"));
     }
-
-
 
 }

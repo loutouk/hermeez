@@ -1,4 +1,4 @@
-package boursier.louis.hermeez.backend.usecases;
+package boursier.louis.hermeez.backend.usecases.user;
 
 import boursier.louis.hermeez.backend.entities.user.User;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * See {@link User}.
  * <p>
  * <p>
- * See {@link boursier.louis.hermeez.backend.usecases.UserOperations}.
+ * See {@link UserOperations}.
  */
 @Configuration
 public class UserOperationConfiguration {
