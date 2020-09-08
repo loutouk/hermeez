@@ -7,7 +7,12 @@ import boursier.louis.hermeez.backend.entities.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class MongoUserOperations implements UserOperations {
 
@@ -16,6 +21,8 @@ public class MongoUserOperations implements UserOperations {
     private UserRepository repository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private DefaultTokenServices tokenServices;
 
     // TODO implement one time authorization code delivered upon in app purchase specific for the email involved
     // TODO verify email match
@@ -134,5 +141,19 @@ public class MongoUserOperations implements UserOperations {
             LOGGER.info("User " + email + " registered");
             return user;
         }
+    }
+
+    @Override
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null) {
+            return new ResponseEntity<>("Authorization header is not present", HttpStatus.UNAUTHORIZED);
+        }
+        String tokenValue = authHeader.replace("Bearer", "").trim();
+        // removes access token and refresh token if presents
+        if (!tokenServices.revokeToken(tokenValue)) {
+            return new ResponseEntity<>("OAuth2AccessToken not found", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>("Logged out", HttpStatus.OK);
     }
 }

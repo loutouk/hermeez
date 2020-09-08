@@ -7,13 +7,12 @@ import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -76,5 +75,10 @@ public class UserController {
         LOGGER.info("registration call");
         User user = userOperations.register(email, password);
         return new UserDTO(user);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        return userOperations.logout(request);
     }
 }

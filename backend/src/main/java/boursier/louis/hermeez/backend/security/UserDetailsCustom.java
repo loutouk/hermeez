@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Extension of the UserDetails class that is used for returning user data when they are authenticated.
@@ -24,8 +23,7 @@ public class UserDetailsCustom implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override

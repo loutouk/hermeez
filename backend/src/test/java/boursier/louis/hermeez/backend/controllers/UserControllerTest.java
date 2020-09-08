@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -32,15 +32,13 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 public class UserControllerTest {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    WebClient client;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String email = "test@example.com";
     private final String password = "password";
     private final String role = User.Role.USER.name();
+    @Autowired
+    private UserRepository userRepository;
+    private WebClient client;
 
     @BeforeClass
     public void init() {
@@ -60,7 +58,6 @@ public class UserControllerTest {
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }
-
 
 
     @BeforeEach
