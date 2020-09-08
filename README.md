@@ -9,5 +9,5 @@ It is similar to Strava's Route Builder, Garmin's RouteCourse or Under Armour's 
 | Tech Stack    |                               |
 |:-------------:|:-----------------------------:|
 | Mobile App    | Flutter / Android (Dart/Java) |
-| REST API      | (Java)                        |
+| REST API      | Spring (Java)                 |
 | Routing Engine| OSRM (C++)                    |
