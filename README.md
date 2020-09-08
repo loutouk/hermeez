@@ -8,6 +8,8 @@ Hermeez generates routes for cyclists according to the distance the user chooses
 It is similar to Strava's Route Builder, Garmin's RouteCourse or Under Armour's MapMyRide.
 
 ### Tech Stack
+
+| Component     | Implementation                |
 |:-------------:|:-----------------------------:|
 | Mobile App    | Flutter / Android (Dart/Java) |
 | REST API      | Spring (Java)                 |
