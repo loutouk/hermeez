@@ -1,9 +1,6 @@
 package boursier.louis.hermeez.backend.entities.user;
 
-import org.joda.time.DateTime;
-
 import java.io.Serializable;
-import java.util.Date;
 
 public class UserDTO implements Serializable {
 
@@ -14,11 +11,11 @@ public class UserDTO implements Serializable {
     public UserDTO(User user) {
         this.email = user.getEmail();
         this.role = user.getRole();
-        if(user.getPremiumExpirationDate() != null) {
+        if (user.getPremiumExpirationDate() != null) {
             this.premiumExpirationDate =
                     user.getPremiumExpirationDate().getYear() + "/" +
-                    user.getPremiumExpirationDate().getDayOfMonth() + "/" +
-                    user.getPremiumExpirationDate().getMonthOfYear();
+                            user.getPremiumExpirationDate().getDayOfMonth() + "/" +
+                            user.getPremiumExpirationDate().getMonthOfYear();
         } else {
             this.premiumExpirationDate = null;
         }

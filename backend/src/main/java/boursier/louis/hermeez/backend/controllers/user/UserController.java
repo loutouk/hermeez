@@ -1,6 +1,5 @@
 package boursier.louis.hermeez.backend.controllers.user;
 
-import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.entities.user.UserDTO;
 import boursier.louis.hermeez.backend.security.UserDetailsCustom;
 import boursier.louis.hermeez.backend.usecases.user.UserOperations;
@@ -8,7 +7,6 @@ import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.*;
-import java.util.Date;
 
 /**
  * Matches specified urls to manually defined functions.
@@ -54,7 +51,7 @@ public class UserController {
         return userOperations.updatePassword(email, newPassword);
     }
 
-    //@PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/updatetopremium")
     ResponseEntity<UserDTO> updateToPremium(OAuth2Authentication authentication,
                                             @RequestParam(value = "durationInDays")
@@ -63,19 +60,19 @@ public class UserController {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
         String email = userDetailsCustom.getUsername();
         LOGGER.info("update to premium call (" + email + ") for " + durationInDays + " day(s)");
-        return userOperations.updateToPremium(email, durationInDays);
+        return userOperations.updateToPremium(userDetailsCustom.getUsername(), userDetailsCustom.getPassword(), durationInDays);
     }
 
     @PostMapping("/signin")
     ResponseEntity<UserDTO> signIn(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
-                   @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
+                                   @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
         LOGGER.info("sign in call");
         return userOperations.signIn(email, password);
     }
 
     @PostMapping("/register")
     ResponseEntity<UserDTO> register(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
-                     @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
+                                     @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
         LOGGER.info("registration call");
         return userOperations.register(email, password);
     }

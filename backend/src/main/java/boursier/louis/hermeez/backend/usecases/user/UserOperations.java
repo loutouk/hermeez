@@ -1,7 +1,6 @@
 package boursier.louis.hermeez.backend.usecases.user;
 
 import boursier.louis.hermeez.backend.controllers.user.UserRepository;
-import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.entities.user.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -14,7 +13,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
  * Allows to abstract the chosen database system and the logic implementation from the business code.
  */
 public interface UserOperations {
-    ResponseEntity<UserDTO> updateToPremium(String email, int durationInDays);
+    ResponseEntity<UserDTO> updateToPremium(String username, String password, int durationInDays);
 
     ResponseEntity<UserDTO> updateToUser(String email);
 

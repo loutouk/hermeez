@@ -15,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-
-import java.util.Calendar;
-import java.util.Date;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 public class MongoUserOperations implements UserOperations {
 
@@ -28,6 +26,9 @@ public class MongoUserOperations implements UserOperations {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private DefaultTokenServices tokenServices;
+    @Autowired
+    private TokenStore tokenStore;
+
 
     // TODO implement one time authorization code delivered upon in app purchase specific for the email involved
     // TODO verify email match
@@ -39,16 +40,17 @@ public class MongoUserOperations implements UserOperations {
      * @param email
      */
     @Override
-    public ResponseEntity<UserDTO> updateToPremium(String email, int durationInDays) {
-        User user = repository.findByEmail(email);
+    public ResponseEntity<UserDTO> updateToPremium(String username, String password, int durationInDays) {
+        User user = repository.findByEmail(username);
         if (user == null) {
-            LOGGER.error("User " + email + " tried to upgrade to premium but email was not found");
+            LOGGER.error("User " + username + " tried to upgrade to premium but email was not found");
             throw new WrongCredentialsException();
         }
         user.setRole(User.Role.PREMIUM);
         user.setPremiumExpirationDate(DateTime.now().plusDays(durationInDays));
-        LOGGER.info("User " + email + " upgraded to premium");
-        return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
+        UserDTO userDTO = new UserDTO(repository.save(user));
+        LOGGER.info("User " + username + " upgraded to premium");
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     /**

@@ -113,6 +113,14 @@
             <version>2.10.5</version>
         </dependency>
 
+        <!-- Scheduled task -->
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>3.1.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
