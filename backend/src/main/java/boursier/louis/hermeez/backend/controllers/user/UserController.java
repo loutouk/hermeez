@@ -8,6 +8,7 @@ import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +16,8 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.util.Date;
 
 /**
  * Matches specified urls to manually defined functions.
@@ -53,12 +54,16 @@ public class UserController {
         return userOperations.updatePassword(email, newPassword);
     }
 
+    //@PreAuthorize("hasAuthority('USER')")
     @PostMapping("/updatetopremium")
-    ResponseEntity<UserDTO> updateToPremium(OAuth2Authentication authentication) {
+    ResponseEntity<UserDTO> updateToPremium(OAuth2Authentication authentication,
+                                            @RequestParam(value = "durationInDays")
+                                            @NotNull @Positive @Max(Constants.MAX_VALIDITY_PREMIUM_SECONDS)
+                                                    int durationInDays) {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
         String email = userDetailsCustom.getUsername();
-        LOGGER.info("update to premium call (" + email + ")");
-        return userOperations.updateToPremium(email);
+        LOGGER.info("update to premium call (" + email + ") for " + durationInDays + " day(s)");
+        return userOperations.updateToPremium(email, durationInDays);
     }
 
     @PostMapping("/signin")

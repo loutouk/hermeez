@@ -7,6 +7,7 @@ import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.entities.user.UserDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MongoUserOperations implements UserOperations {
 
@@ -35,14 +39,32 @@ public class MongoUserOperations implements UserOperations {
      * @param email
      */
     @Override
-    public ResponseEntity<UserDTO> updateToPremium(String email) {
+    public ResponseEntity<UserDTO> updateToPremium(String email, int durationInDays) {
         User user = repository.findByEmail(email);
         if (user == null) {
             LOGGER.error("User " + email + " tried to upgrade to premium but email was not found");
             throw new WrongCredentialsException();
         }
         user.setRole(User.Role.PREMIUM);
+        user.setPremiumExpirationDate(DateTime.now().plusDays(durationInDays));
         LOGGER.info("User " + email + " upgraded to premium");
+        return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
+    }
+
+    /**
+     * Username enumeration vulnerabilities should be dealt with.
+     *
+     * @param email
+     */
+    @Override
+    public ResponseEntity<UserDTO> updateToUser(String email) {
+        User user = repository.findByEmail(email);
+        if (user == null) {
+            LOGGER.error("User " + email + " tried to upgrade to user but email was not found");
+            throw new WrongCredentialsException();
+        }
+        user.setRole(User.Role.USER);
+        LOGGER.info("User " + email + " upgraded to user");
         return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
     }
 

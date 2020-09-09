@@ -14,7 +14,9 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
  * Allows to abstract the chosen database system and the logic implementation from the business code.
  */
 public interface UserOperations {
-    ResponseEntity<UserDTO> updateToPremium(String email);
+    ResponseEntity<UserDTO> updateToPremium(String email, int durationInDays);
+
+    ResponseEntity<UserDTO> updateToUser(String email);
 
     ResponseEntity<UserDTO> updatePassword(String email, String newPassword);
 

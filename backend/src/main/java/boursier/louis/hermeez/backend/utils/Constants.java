@@ -34,6 +34,8 @@ public class Constants {
     public static final int EMAIL_MIN_LENGTH = 2;
     public static final int EMAIL_MAX_LENGTH = 36;
 
+    public static final int MAX_VALIDITY_PREMIUM_SECONDS = 365;
+
     private Constants() {
     }
 }

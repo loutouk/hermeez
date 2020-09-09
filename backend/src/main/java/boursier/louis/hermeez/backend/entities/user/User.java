@@ -5,12 +5,14 @@ import boursier.louis.hermeez.backend.entities.user.userconstraints.PasswordVali
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 
 // TODO USER DTO (
 //  Never expose the Entities directly to the endpoint instead its better to have a wrapper
@@ -38,11 +40,13 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private Role role;
+    private DateTime premiumExpirationDate;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
         this.role = Role.USER;
+        this.premiumExpirationDate = null;
     }
 
     public enum Role {USER, PREMIUM, OMNISCIENT}
