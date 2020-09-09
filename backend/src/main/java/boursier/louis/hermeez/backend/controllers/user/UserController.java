@@ -35,48 +35,43 @@ public class UserController {
     private UserOperations userOperations;
 
     @PostMapping("/updateemail")
-    UserDTO updateEmail(@RequestParam(value = "newEmail") @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH,
+    ResponseEntity<UserDTO> updateEmail(@RequestParam(value = "newEmail") @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH,
             max = Constants.EMAIL_MAX_LENGTH) String newEmail, OAuth2Authentication authentication) {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
         String email = userDetailsCustom.getUsername();
         LOGGER.info("update email call (" + email + ")");
-        User user = userOperations.updateEmail(email, newEmail);
-        return new UserDTO(user);
+        return userOperations.updateEmail(email, newEmail);
     }
 
     @PostMapping("/updatepassword")
-    UserDTO updatePassword(@RequestParam(value = "newPassword") @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH,
+    ResponseEntity<UserDTO> updatePassword(@RequestParam(value = "newPassword") @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH,
             max = Constants.PASSWD_MAX_LENGTH) String newPassword, OAuth2Authentication authentication) {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
         String email = userDetailsCustom.getUsername();
         LOGGER.info("update password call (" + email + ")");
-        User user = userOperations.updatePassword(email, newPassword);
-        return new UserDTO(user);
+        return userOperations.updatePassword(email, newPassword);
     }
 
     @PostMapping("/updatetopremium")
-    UserDTO updateToPremium(OAuth2Authentication authentication) {
+    ResponseEntity<UserDTO> updateToPremium(OAuth2Authentication authentication) {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
         String email = userDetailsCustom.getUsername();
         LOGGER.info("update to premium call (" + email + ")");
-        User user = userOperations.updateToPremium(email);
-        return new UserDTO(user);
+        return userOperations.updateToPremium(email);
     }
 
     @PostMapping("/signin")
-    UserDTO signIn(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
+    ResponseEntity<UserDTO> signIn(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
                    @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
         LOGGER.info("sign in call");
-        User user = userOperations.signIn(email, password);
-        return new UserDTO(user);
+        return userOperations.signIn(email, password);
     }
 
     @PostMapping("/register")
-    UserDTO register(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
+    ResponseEntity<UserDTO> register(@RequestParam @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String email,
                      @RequestParam @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String password) {
         LOGGER.info("registration call");
-        User user = userOperations.register(email, password);
-        return new UserDTO(user);
+        return userOperations.register(email, password);
     }
 
     @PreAuthorize("isAuthenticated()")

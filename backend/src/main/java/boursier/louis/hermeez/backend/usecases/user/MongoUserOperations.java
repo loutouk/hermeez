@@ -4,6 +4,7 @@ import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTak
 import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
 import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.entities.user.User;
+import boursier.louis.hermeez.backend.entities.user.UserDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class MongoUserOperations implements UserOperations {
      * @param email
      */
     @Override
-    public User updateToPremium(String email) {
+    public ResponseEntity<UserDTO> updateToPremium(String email) {
         User user = repository.findByEmail(email);
         if (user == null) {
             LOGGER.error("User " + email + " tried to upgrade to premium but email was not found");
@@ -42,7 +43,7 @@ public class MongoUserOperations implements UserOperations {
         }
         user.setRole(User.Role.PREMIUM);
         LOGGER.info("User " + email + " upgraded to premium");
-        return repository.save(user);
+        return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
     }
 
     /**
@@ -56,7 +57,7 @@ public class MongoUserOperations implements UserOperations {
      * @param newPassword
      */
     @Override
-    public User updatePassword(String email, String newPassword) {
+    public ResponseEntity<UserDTO> updatePassword(String email, String newPassword) {
         User user = repository.findByEmail(email);
         if (user == null) {
             LOGGER.error("User " + email + " tried to update password but email was not found");
@@ -65,7 +66,7 @@ public class MongoUserOperations implements UserOperations {
             user.setPassword(passwordEncoder.encode(newPassword));
             user = repository.save(user);
             LOGGER.info("User " + email + " changed its password");
-            return user;
+            return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
         }
     }
 
@@ -79,7 +80,7 @@ public class MongoUserOperations implements UserOperations {
      * @param newEmail
      */
     @Override
-    public User updateEmail(String email, String newEmail) {
+    public ResponseEntity<UserDTO> updateEmail(String email, String newEmail) {
         User user = repository.findByEmail(email);
         if (user == null) {
             LOGGER.error("User " + email + " tried to update email but email was not found");
@@ -88,7 +89,7 @@ public class MongoUserOperations implements UserOperations {
             user.setEmail(newEmail);
             user = repository.save(user);
             LOGGER.info("User " + email + " changed its email with " + newEmail);
-            return user;
+            return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
         }
     }
 
@@ -105,7 +106,7 @@ public class MongoUserOperations implements UserOperations {
      * @return User object if authenticated, error message.
      */
     @Override
-    public User signIn(String email, String password) {
+    public ResponseEntity<UserDTO> signIn(String email, String password) {
         User user = repository.findByEmail(email);
         if (user == null) {
             LOGGER.error("User " + email + " tried to sign in but credentials were invalid");
@@ -115,7 +116,7 @@ public class MongoUserOperations implements UserOperations {
             throw new WrongCredentialsException();
         } else {
             LOGGER.info("User " + email + " signed in");
-            return user;
+            return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
         }
     }
 
@@ -130,7 +131,7 @@ public class MongoUserOperations implements UserOperations {
      * @return User object if success, error message otherwise.
      */
     @Override
-    public User register(String email, String password) {
+    public ResponseEntity<UserDTO> register(String email, String password) {
         User user = repository.findByEmail(email);
         if (user != null) {
             LOGGER.error("User " + email + " tried to register but email was already taken");
@@ -139,7 +140,7 @@ public class MongoUserOperations implements UserOperations {
             user = new User(email, passwordEncoder.encode(password));
             user = repository.save(user);
             LOGGER.info("User " + email + " registered");
-            return user;
+            return new ResponseEntity<>(new UserDTO(repository.save(user)), HttpStatus.OK);
         }
     }
 
