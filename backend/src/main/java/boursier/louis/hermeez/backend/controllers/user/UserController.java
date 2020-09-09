@@ -8,6 +8,7 @@ import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -79,5 +80,11 @@ public class UserController {
     public ResponseEntity<String> logout(OAuth2Authentication authentication) {
         LOGGER.info("logout call");
         return userOperations.logout(authentication);
+    }
+
+    @PreAuthorize("hasAuthority('PREMIUM')")
+    @GetMapping("/test")
+    public ResponseEntity<String> test(OAuth2Authentication authentication) {
+        return new ResponseEntity<>("test", HttpStatus.OK);
     }
 }

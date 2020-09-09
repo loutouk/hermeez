@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -166,6 +167,14 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleWrongCredentialsException(final WrongCredentialsException ex) {
         LOGGER.error(ex.getClass().getName());
         LOGGER.error(ex.getLocalizedMessage());
+        final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(final AccessDeniedException ex) {
+        LOGGER.error(ex.getClass().getName());
+        LOGGER.error("UNAUTHORIZED", ex);
         final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
