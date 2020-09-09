@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class MongoUserOperations implements UserOperations {
 
@@ -144,16 +144,15 @@ public class MongoUserOperations implements UserOperations {
     }
 
     @Override
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null) {
-            return new ResponseEntity<>("Authorization header is not present", HttpStatus.UNAUTHORIZED);
-        }
-        String tokenValue = authHeader.replace("Bearer", "").trim();
+    public ResponseEntity<String> logout(OAuth2Authentication authentication) {
+        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+        String accessToken = details.getTokenValue();
         // removes access token and refresh token if presents
-        if (!tokenServices.revokeToken(tokenValue)) {
+        if (!tokenServices.revokeToken(accessToken)) {
+            LOGGER.error("OAuth2AccessToken not found for logging out (" + accessToken + ")");
             return new ResponseEntity<>("OAuth2AccessToken not found", HttpStatus.UNAUTHORIZED);
         }
+        LOGGER.info("User logged out");
         return new ResponseEntity<>("Logged out", HttpStatus.OK);
     }
 }

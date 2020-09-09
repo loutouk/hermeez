@@ -29,6 +29,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     /**
      * Order matters for URLs matching, so URLs must be defined from the most specific to the more general path,
      * so that no path is overridden by the following ones.
+     * <p>
+     * Controller's methods access is defined at method level in the Controller class.
+     * See {@link boursier.louis.hermeez.backend.controllers.user.UserController}.
+     * <p>
+     * This method has priority over method level security.
      *
      * @param http
      * @throws Exception
@@ -40,12 +45,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .and()
                 .antMatcher("/" + Constants.API_NAME + "/**")
                 .authorizeRequests()
-                .antMatchers(
-                        "/" + Constants.API_NAME + "/signin",
-                        "/" + Constants.API_NAME + "/register",
-                        "/" + Constants.API_NAME + "/test").permitAll()
-                .antMatchers("/" + Constants.API_NAME + "/updatetopremium").hasAuthority("USER")
-                .antMatchers("/" + Constants.API_NAME + "/updateemail").hasAuthority("PREMIUM")
+                .antMatchers("/" + Constants.API_NAME + "/signin", "/" + Constants.API_NAME + "/register").permitAll()
                 .antMatchers("/" + Constants.API_NAME + "/users", "/" + Constants.API_NAME + "/users/**").hasAuthority("OMNISCIENT")
                 .anyRequest().authenticated()
                 .and()

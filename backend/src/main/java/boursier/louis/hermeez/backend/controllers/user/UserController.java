@@ -2,6 +2,7 @@ package boursier.louis.hermeez.backend.controllers.user;
 
 import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.entities.user.UserDTO;
+import boursier.louis.hermeez.backend.security.UserDetailsCustom;
 import boursier.louis.hermeez.backend.usecases.user.UserOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -9,10 +10,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -34,29 +35,30 @@ public class UserController {
     private UserOperations userOperations;
 
     @PostMapping("/updateemail")
-    @PreAuthorize("authentication.principal == #email")
-    UserDTO updateEmail(@RequestParam(value = "email") @NotBlank String email,
-                        @RequestParam(value = "newEmail")
-                        @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH, max = Constants.EMAIL_MAX_LENGTH) String newEmail) {
-        LOGGER.info("update email call");
+    UserDTO updateEmail(@RequestParam(value = "newEmail") @NotBlank @Size(min = Constants.EMAIL_MIN_LENGTH,
+            max = Constants.EMAIL_MAX_LENGTH) String newEmail, OAuth2Authentication authentication) {
+        UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
+        String email = userDetailsCustom.getUsername();
+        LOGGER.info("update email call (" + email + ")");
         User user = userOperations.updateEmail(email, newEmail);
         return new UserDTO(user);
     }
 
     @PostMapping("/updatepassword")
-    @PreAuthorize("authentication.principal == #email")
-    UserDTO updatePassword(@RequestParam(value = "email") @NotBlank String email,
-                           @RequestParam(value = "newPassword") @NotBlank
-                           @Size(min = Constants.PASSWD_MIN_LENGTH, max = Constants.PASSWD_MAX_LENGTH) String newPassword) {
-        LOGGER.info("update password call");
+    UserDTO updatePassword(@RequestParam(value = "newPassword") @NotBlank @Size(min = Constants.PASSWD_MIN_LENGTH,
+            max = Constants.PASSWD_MAX_LENGTH) String newPassword, OAuth2Authentication authentication) {
+        UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
+        String email = userDetailsCustom.getUsername();
+        LOGGER.info("update password call (" + email + ")");
         User user = userOperations.updatePassword(email, newPassword);
         return new UserDTO(user);
     }
 
     @PostMapping("/updatetopremium")
-    @PreAuthorize("hasAuthority('USER') && authentication.principal == #email")
-    UserDTO updateToPremium(@RequestParam(value = "email") @NotBlank String email) {
-        LOGGER.info("update to premium call");
+    UserDTO updateToPremium(OAuth2Authentication authentication) {
+        UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
+        String email = userDetailsCustom.getUsername();
+        LOGGER.info("update to premium call (" + email + ")");
         User user = userOperations.updateToPremium(email);
         return new UserDTO(user);
     }
@@ -77,8 +79,10 @@ public class UserController {
         return new UserDTO(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        return userOperations.logout(request);
+    public ResponseEntity<String> logout(OAuth2Authentication authentication) {
+        LOGGER.info("logout call");
+        return userOperations.logout(authentication);
     }
 }

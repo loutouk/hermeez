@@ -3,8 +3,7 @@ package boursier.louis.hermeez.backend.usecases.user;
 import boursier.louis.hermeez.backend.controllers.user.UserRepository;
 import boursier.louis.hermeez.backend.entities.user.User;
 import org.springframework.http.ResponseEntity;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 /**
  * Describes which operations the User entity requires in addition to CRUD operations on the User
@@ -24,7 +23,7 @@ public interface UserOperations {
 
     User register(String email, String password);
 
-    ResponseEntity<String> logout(HttpServletRequest request);
+    ResponseEntity<String> logout(OAuth2Authentication authentication);
 
 
 }
