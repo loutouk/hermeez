@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * See {@link UserOperations}.
  */
 @Configuration
-public class UserOperationConfiguration {
+public class UserOperationsConfiguration {
     @Bean
     public UserOperations userOperations() {
         return new MongoUserOperations();
