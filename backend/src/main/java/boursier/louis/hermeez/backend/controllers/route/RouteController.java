@@ -3,20 +3,18 @@ package boursier.louis.hermeez.backend.controllers.route;
 import boursier.louis.hermeez.backend.controllers.user.UserController;
 import boursier.louis.hermeez.backend.entities.coordinate.Coordinate;
 import boursier.louis.hermeez.backend.entities.route.RouteDTO;
-import boursier.louis.hermeez.backend.entities.user.UserDTO;
-import boursier.louis.hermeez.backend.security.UserDetailsCustom;
 import boursier.louis.hermeez.backend.usecases.route.RouteOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 @RestController
 @RequestMapping(Constants.API_NAME)

@@ -5,13 +5,16 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-
+/**
+ * See {@link boursier.louis.hermeez.backend.entities.coordinate.coordinateconstraints.CoordinateValidConstraint}.
+ * See {@link boursier.louis.hermeez.backend.entities.coordinate.Coordinate}.
+ */
 @Documented
 @Constraint(validatedBy = CoordinateValidator.class)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.TYPE}) // Class level
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CoordinateValidConstraint {
-    String message() default "coordinate is not valid";
+    String message() default "coordinate are not valid";
 
     Class<?>[] groups() default {};
 

@@ -13,10 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
-// TODO USER DTO (
-//  Never expose the Entities directly to the endpoint instead its better to have a wrapper
-//  i.e DTO that translates your entity to the required response.)
-
 @Document
 @Getter
 @Setter

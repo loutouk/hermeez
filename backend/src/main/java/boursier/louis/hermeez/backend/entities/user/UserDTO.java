@@ -14,8 +14,8 @@ public class UserDTO implements Serializable {
         if (user.getPremiumExpirationDate() != null) {
             this.premiumExpirationDate =
                     user.getPremiumExpirationDate().getYear() + "/" +
-                    user.getPremiumExpirationDate().getDayOfMonth() + "/" +
-                    user.getPremiumExpirationDate().getMonthOfYear();
+                            user.getPremiumExpirationDate().getDayOfMonth() + "/" +
+                            user.getPremiumExpirationDate().getMonthOfYear();
         } else {
             this.premiumExpirationDate = null;
         }
