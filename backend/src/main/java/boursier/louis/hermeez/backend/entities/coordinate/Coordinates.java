@@ -1,30 +1,23 @@
 package boursier.louis.hermeez.backend.entities.coordinate;
 
+import boursier.louis.hermeez.backend.entities.coordinate.coordinateconstraints.CoordinatesValidConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
+
 @Getter
 @Setter
+@CoordinatesValidConstraint // Class level constraint for caching coordinate values to fields members during validation
 public class Coordinates {
 
-    private final String rawContent;
-    // TODO custom class constraint
-    private Coordinate[] coordinates; // 90.0,90.0;90.0,90.0;90.0,90.0
+    public static final String COORDINATES_DELIMITER = ":";
+
+    private final String rawContent; // 90.0,90.0:90.0,90.0
+    @Valid // nested validation
+    private Coordinate[] coordinates;
 
     public Coordinates(String rawContent) {
         this.rawContent = rawContent;
-    }
-
-    // TODO put in a class level validation
-    public static Coordinate[] extractCoordinates(String rawContent) {
-        if (rawContent == null) {
-            return null;
-        }
-        String[] rawCoordinates = rawContent.split(";");
-        Coordinate[] coordinates = new Coordinate[rawCoordinates.length];
-        for (int i = 0; i < rawCoordinates.length; i++) {
-            coordinates[i] = new Coordinate(rawCoordinates[i]);
-        }
-        return coordinates;
     }
 }

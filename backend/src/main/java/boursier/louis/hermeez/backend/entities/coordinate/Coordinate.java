@@ -9,6 +9,8 @@ import lombok.Setter;
 @CoordinateValidConstraint // Class level constraint for caching coordinate values to fields members during validation
 public class Coordinate {
 
+    public static final String LAT_LONG_DELIMITER = ",";
+
     private final String rawContent; // 90.0,90.0
     private double longitude;
     private double latitude;

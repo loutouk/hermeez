@@ -84,6 +84,7 @@ public class UserController {
         return userOperations.logout(authentication);
     }
 
+    // TODO remove
     @PreAuthorize("hasAuthority('PREMIUM')")
     @GetMapping("/test")
     public ResponseEntity<String> test(OAuth2Authentication authentication) {

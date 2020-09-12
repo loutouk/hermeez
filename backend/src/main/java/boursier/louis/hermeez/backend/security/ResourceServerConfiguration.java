@@ -46,7 +46,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatcher("/" + Constants.API_NAME + "/**")
                 .authorizeRequests()
                 .antMatchers("/" + Constants.API_NAME + "/signin", "/" + Constants.API_NAME + "/register").permitAll()
-                .antMatchers("/" + Constants.API_NAME + "/shortestpath").permitAll() // TODO remove
+                .antMatchers("/" + Constants.API_NAME + "/route").permitAll() // TODO remove
+                .antMatchers("/" + Constants.API_NAME + "/route**").permitAll() // TODO remove
                 .antMatchers("/" + Constants.API_NAME + "/users", "/" + Constants.API_NAME + "/users/**").hasAuthority("OMNISCIENT")
                 .anyRequest().authenticated()
                 .and()

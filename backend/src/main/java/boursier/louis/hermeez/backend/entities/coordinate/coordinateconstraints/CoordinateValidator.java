@@ -32,7 +32,7 @@ public class CoordinateValidator implements ConstraintValidator<CoordinateValidC
         if (coordinateObject == null || coordinateObject.getRawContent() == null) {
             return false;
         }
-        String[] longitudeLatitude = coordinateObject.getRawContent().split(",");
+        String[] longitudeLatitude = coordinateObject.getRawContent().split(Coordinate.LAT_LONG_DELIMITER);
         if (longitudeLatitude.length != 2) {
             return false;
         }
