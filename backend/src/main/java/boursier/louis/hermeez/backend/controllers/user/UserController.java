@@ -1,5 +1,6 @@
 package boursier.louis.hermeez.backend.controllers.user;
 
+import boursier.louis.hermeez.backend.entities.user.User;
 import boursier.louis.hermeez.backend.entities.user.UserDTO;
 import boursier.louis.hermeez.backend.security.UserDetailsCustom;
 import boursier.louis.hermeez.backend.usecases.user.UserOperations;
@@ -28,6 +29,7 @@ import javax.validation.constraints.*;
 @Validated
 public class UserController {
 
+
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @Autowired
@@ -55,7 +57,7 @@ public class UserController {
     @PostMapping("/updatetopremium")
     ResponseEntity<UserDTO> updateToPremium(OAuth2Authentication authentication,
                                             @RequestParam(value = "durationInDays")
-                                            @NotNull @Positive @Max(Constants.MAX_VALIDITY_PREMIUM_SECONDS)
+                                            @NotNull @Positive @Max(User.MAX_VALIDITY_PREMIUM_DAYS)
                                                     int durationInDays) {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getUserAuthentication().getPrincipal();
         String email = userDetailsCustom.getUsername();

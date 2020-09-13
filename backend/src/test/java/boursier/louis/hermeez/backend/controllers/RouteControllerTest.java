@@ -66,6 +66,10 @@ public class RouteControllerTest {
                 .uri(registerUserUrl)
                 .body(inserter);
 
+        /**
+         * Pay attention to the bodyToMono method,
+         * which will throw a WebClientException if the status code is 4xx (client error) or 5xx (Server error).
+         */
         String response = request.exchange().block().bodyToMono(String.class).block();
 
         assertNotNull(response);

@@ -18,6 +18,8 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 public class User {
 
+    public static final int MAX_VALIDITY_PREMIUM_DAYS = 365;
+
     @Id
     private String id;
     // TODO check database indexes and find out why the unique constraint does not work

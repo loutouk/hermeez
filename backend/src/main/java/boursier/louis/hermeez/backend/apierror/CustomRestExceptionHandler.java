@@ -1,6 +1,8 @@
 package boursier.louis.hermeez.backend.apierror;
 
 import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTakenException;
+import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMQueryException;
+import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMResponseException;
 import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -174,7 +176,23 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<Object> handleAccessDeniedException(final AccessDeniedException ex) {
         LOGGER.error(ex.getClass().getName());
-        LOGGER.error("UNAUTHORIZED", ex);
+        LOGGER.error("UNAUTHORIZED", ex.getLocalizedMessage());
+        final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({OSRMResponseException.class})
+    public ResponseEntity<Object> handleOSRMResponseException(final OSRMResponseException ex) {
+        LOGGER.error(ex.getClass().getName());
+        LOGGER.error("OSRM server response error", ex.getLocalizedMessage());
+        final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({OSRMQueryException.class})
+    public ResponseEntity<Object> handleOSRMQueryException(final OSRMQueryException ex) {
+        LOGGER.error(ex.getClass().getName());
+        LOGGER.error("OSRM server query error", ex.getLocalizedMessage());
         final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }

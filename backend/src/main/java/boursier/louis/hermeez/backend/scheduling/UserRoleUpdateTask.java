@@ -19,10 +19,11 @@ public class UserRoleUpdateTask {
     private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MongoUserOperations.class);
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private static final int UPDATE_USER_ROLE_TASK_DELAY_MILLISECONDS = 60000;
 
     @Async
-    @Scheduled(fixedDelay = Constants.UPDATE_USER_ROLE_TASK_DELAY_MILLISECONDS,
-            initialDelay = Constants.UPDATE_USER_ROLE_TASK_DELAY_MILLISECONDS)
+    @Scheduled(fixedDelay = UPDATE_USER_ROLE_TASK_DELAY_MILLISECONDS,
+            initialDelay = UPDATE_USER_ROLE_TASK_DELAY_MILLISECONDS)
     public void reportCurrentTime() {
         LOGGER.info("The time is now {}", dateFormat.format(new Date()));
         // TODO

@@ -34,13 +34,9 @@ public class Constants {
     public static final int EMAIL_MIN_LENGTH = 2;
     public static final int EMAIL_MAX_LENGTH = 36;
 
-    //////// User entity
+    //////// OSRM SERVER
     /////////////////////////////////////////////////////////////////
-    public static final int MAX_VALIDITY_PREMIUM_SECONDS = 365;
-
-    //////// Scheduled tasks
-    /////////////////////////////////////////////////////////////////
-    public static final int UPDATE_USER_ROLE_TASK_DELAY_MILLISECONDS = 60000;
+    public static final String OSRM_COORDINATES_DELIMITER = ";";
 
     private Constants() {
     }
