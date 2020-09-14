@@ -17,34 +17,30 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
-import org.springframework.web.servlet.function.ServerResponse;
 
 public class PersonalServerRouteOperations implements RouteOperations {
 
     private static final Logger LOGGER = LogManager.getLogger(MongoUserOperations.class);
     private static final String ROUTING_SERVER_BASE_URL = "http://localhost:5000/";
     private static final String ROUTING_SERVER_ROUTE_PATH = "route/v1/bicycling/";
+    private static final String ROUTING_SERVER_STEPS_DETAILS_PARAMETER = "steps=true";
     private static final String OSRM_OK_RESPONSE_CODE = "Ok";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public ResponseEntity<RouteDTO> route(Coordinates coordinates) {
-        WebClient webClient = WebClient.builder().baseUrl(ROUTING_SERVER_BASE_URL).build();
-        LinkedMultiValueMap map = new LinkedMultiValueMap();
-        map.add("steps", "true"); // returns route instructions for each trip
-        BodyInserters.MultipartInserter inserter = BodyInserters.fromMultipartData(map);
         String OSRMFormatCoordinates = formatCoordinatesToOSRMCoordinates(coordinates.getRawContent());
-        String routeURL = ROUTING_SERVER_BASE_URL + ROUTING_SERVER_ROUTE_PATH + OSRMFormatCoordinates;
-
+        String routeURL = ROUTING_SERVER_BASE_URL + ROUTING_SERVER_ROUTE_PATH + OSRMFormatCoordinates + "?" +
+                ROUTING_SERVER_STEPS_DETAILS_PARAMETER;
         WebClient.RequestHeadersSpec<?> request = WebClient.create()
                 .method(HttpMethod.GET)
                 .uri(routeURL)
-                .body(inserter);
+                .contentType(MediaType.MULTIPART_FORM_DATA);
+        return processRequestToOSRMServer(request);
+    }
 
+    private ResponseEntity<RouteDTO> processRequestToOSRMServer(WebClient.RequestHeadersSpec<?> request) {
         String response = request.exchange().onErrorResume(e -> {
             LOGGER.error("Route endpoint error while requesting the OSRM server: " + e.getMessage());
             throw new OSRMQueryException();
