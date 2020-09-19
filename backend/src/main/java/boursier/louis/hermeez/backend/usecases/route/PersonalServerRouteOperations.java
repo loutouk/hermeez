@@ -3,8 +3,7 @@ package boursier.louis.hermeez.backend.usecases.route;
 import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMQueryException;
 import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMResponseException;
 import boursier.louis.hermeez.backend.entities.coordinate.Coordinates;
-import boursier.louis.hermeez.backend.entities.route.OSRMResponse;
-import boursier.louis.hermeez.backend.entities.route.Route;
+import boursier.louis.hermeez.backend.entities.route.osrmroute.OSRMRoute;
 import boursier.louis.hermeez.backend.entities.route.RouteDTO;
 import boursier.louis.hermeez.backend.usecases.user.MongoUserOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
@@ -56,7 +55,15 @@ public class PersonalServerRouteOperations implements RouteOperations {
         if(root.has("code")) {
             if(root.path("code").asText().equals(OSRM_OK_RESPONSE_CODE)) {
                 LOGGER.info("routing server called for route endpoint");
-                return new ResponseEntity<>(new RouteDTO(new Route(new OSRMResponse(response))), HttpStatus.OK);
+                // TODO use a bean to specify the route implementation used?
+                // TODO remove try catch for cleaner handler?
+                try {
+                    return new ResponseEntity<>(new OSRMRoute(response).toRouteDTO(), HttpStatus.OK);
+                } catch (JsonProcessingException e) {
+                    // TODO clean
+                    // e.printStackTrace();
+                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             } else {
                 LOGGER.error("Error while looking at OSRM response for route endpoint: " + root.path("code").asText());
                 throw new OSRMResponseException();
