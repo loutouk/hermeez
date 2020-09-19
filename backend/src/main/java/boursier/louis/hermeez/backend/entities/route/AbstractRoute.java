@@ -6,7 +6,7 @@ import lombok.Setter;
 
 /**
  * Route super class that wraps any implementation of a Route object.
- *
+ * <p>
  * See {@link boursier.louis.hermeez.backend.entities.route.osrmroute.OSRMRoute}.
  */
 @Getter
@@ -15,6 +15,9 @@ public abstract class AbstractRoute {
 
     protected RouteContent routeContent;
 
-    public AbstractRoute() {};
+    public AbstractRoute() {
+    }
+
+    ;
 
 }

@@ -2,7 +2,6 @@ package boursier.louis.hermeez.backend.scheduling;
 
 
 import boursier.louis.hermeez.backend.usecases.user.MongoUserOperations;
-import boursier.louis.hermeez.backend.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;

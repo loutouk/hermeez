@@ -6,7 +6,6 @@ import lombok.Setter;
 /**
  * The different places that make the route. Consists at least of the starting place and the ending place,
  * and can contain more points in between.
- *
  */
 @Getter
 @Setter

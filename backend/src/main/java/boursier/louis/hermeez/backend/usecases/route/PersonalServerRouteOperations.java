@@ -3,8 +3,8 @@ package boursier.louis.hermeez.backend.usecases.route;
 import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMQueryException;
 import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMResponseException;
 import boursier.louis.hermeez.backend.entities.coordinate.Coordinates;
-import boursier.louis.hermeez.backend.entities.route.osrmroute.OSRMRoute;
 import boursier.louis.hermeez.backend.entities.route.RouteDTO;
+import boursier.louis.hermeez.backend.entities.route.osrmroute.OSRMRoute;
 import boursier.louis.hermeez.backend.usecases.user.MongoUserOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,6 +26,18 @@ public class PersonalServerRouteOperations implements RouteOperations {
     private static final String ROUTING_SERVER_STEPS_DETAILS_PARAMETER = "steps=true";
     private static final String OSRM_OK_RESPONSE_CODE = "Ok";
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * Our internal Coordinates entity may use a different format than the OSRM server we are calling.
+     * This function translates our local format to the OSRM format.
+     * See {@link Coordinates#rawContent}.
+     *
+     * @param coordinates
+     * @return
+     */
+    private static String formatCoordinatesToOSRMCoordinates(String coordinates) {
+        return coordinates.replaceAll(Coordinates.COORDINATES_DELIMITER, Constants.OSRM_COORDINATES_DELIMITER);
+    }
 
     @Override
     public ResponseEntity<RouteDTO> route(Coordinates coordinates) {
@@ -52,8 +64,8 @@ public class PersonalServerRouteOperations implements RouteOperations {
             LOGGER.error("Error while reading OSRM response for route endpoint: " + e.getMessage());
             throw new OSRMResponseException();
         }
-        if(root.has("code")) {
-            if(root.path("code").asText().equals(OSRM_OK_RESPONSE_CODE)) {
+        if (root.has("code")) {
+            if (root.path("code").asText().equals(OSRM_OK_RESPONSE_CODE)) {
                 LOGGER.info("routing server called for route endpoint");
                 // TODO use a bean to specify the route implementation used?
                 // TODO remove try catch for cleaner handler?
@@ -72,16 +84,5 @@ public class PersonalServerRouteOperations implements RouteOperations {
             LOGGER.error("Error while looking at OSRM response for route endpoint. No error code available.");
             throw new OSRMResponseException();
         }
-    }
-
-    /**
-     * Our internal Coordinates entity may use a different format than the OSRM server we are calling.
-     * This function translates our local format to the OSRM format.
-     * See {@link Coordinates#rawContent}.
-     * @param coordinates
-     * @return
-     */
-    private static String formatCoordinatesToOSRMCoordinates(String coordinates) {
-        return coordinates.replaceAll(Coordinates.COORDINATES_DELIMITER, Constants.OSRM_COORDINATES_DELIMITER);
     }
 }

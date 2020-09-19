@@ -6,5 +6,7 @@ import java.io.Serializable;
 
 public class RouteDTO extends AbstractRoute implements Serializable {
 
-    public RouteDTO(RouteContent routeContent) { this.routeContent = routeContent; }
+    public RouteDTO(RouteContent routeContent) {
+        this.routeContent = routeContent;
+    }
 }
