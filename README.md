@@ -11,6 +11,6 @@ It is similar to Strava's Route Builder, Garmin's RouteCourse or Under Armour's 
 
 | Component     | Implementation                |
 |:-------------:|:-----------------------------:|
-| Mobile App    | Flutter / Android (Dart/Java) |
+| Mobile App    | Android (Java)                |
 | REST API      | Spring (Java)                 |
 | Routing Engine| OSRM (C++)                    |
