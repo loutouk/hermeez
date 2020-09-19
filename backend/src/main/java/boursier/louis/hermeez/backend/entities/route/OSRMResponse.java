@@ -10,7 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OSRMResponse {
+
     private String response;
+
+    private Class Route () {
+        float distance;
+        float durantion_seconds;
+        Geometry geometry;
+    }
 
     public OSRMResponse(String response) {
         this.response = response;
