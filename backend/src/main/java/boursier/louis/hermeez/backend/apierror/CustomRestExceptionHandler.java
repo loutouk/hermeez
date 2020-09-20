@@ -4,6 +4,7 @@ import boursier.louis.hermeez.backend.apierror.registrationerror.EmailAlreadyTak
 import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMQueryException;
 import boursier.louis.hermeez.backend.apierror.routeoperationserror.OSRMResponseException;
 import boursier.louis.hermeez.backend.apierror.signinerror.WrongCredentialsException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.TypeMismatchException;
@@ -194,6 +195,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         LOGGER.error(ex.getClass().getName());
         LOGGER.error("OSRM server query error", ex.getLocalizedMessage());
         final ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+
+    // Parsing error from JSON to Java object
+    @ExceptionHandler({JsonProcessingException.class})
+    public ResponseEntity<Object> handleOSRMQueryException(final JsonProcessingException ex) {
+        LOGGER.error(ex.getClass().getName());
+        LOGGER.error("Parsing error from JSON OSRM Route object to Java object", ex.getLocalizedMessage());
+        final ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), ERROR_OCCURRED_MSG);
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 

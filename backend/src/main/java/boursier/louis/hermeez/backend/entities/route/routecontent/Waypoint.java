@@ -9,11 +9,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class WayPoint {
+public class Waypoint {
     private Location location;
     private String name;
 
-    public WayPoint(Location location, String name) {
+    public Waypoint(Location location, String name) {
         this.location = location;
         this.name = name;
     }

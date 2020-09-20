@@ -2,6 +2,7 @@ package boursier.louis.hermeez.backend.usecases.route;
 
 import boursier.louis.hermeez.backend.entities.coordinate.Coordinates;
 import boursier.louis.hermeez.backend.entities.route.RouteDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 
 public interface RouteOperations {
@@ -11,5 +12,5 @@ public interface RouteOperations {
      * @param coordinates String of format {longitude},{latitude};{longitude},{latitude}[;{longitude},{latitude} ...]
      * @return
      */
-    ResponseEntity<RouteDTO> route(Coordinates coordinates);
+    ResponseEntity<RouteDTO> route(Coordinates coordinates) throws JsonProcessingException;
 }

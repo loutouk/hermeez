@@ -5,6 +5,7 @@ import boursier.louis.hermeez.backend.entities.coordinate.Coordinates;
 import boursier.louis.hermeez.backend.entities.route.RouteDTO;
 import boursier.louis.hermeez.backend.usecases.route.RouteOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class RouteController {
      * @return
      */
     @GetMapping("/route")
-    ResponseEntity<RouteDTO> route(@NotNull @Valid @ModelAttribute("coordinates") Coordinates coordinates) {
+    ResponseEntity<RouteDTO> route(@NotNull @Valid @ModelAttribute("coordinates") Coordinates coordinates) throws JsonProcessingException {
         LOGGER.info("route path call");
         return routeOperations.route(coordinates);
     }

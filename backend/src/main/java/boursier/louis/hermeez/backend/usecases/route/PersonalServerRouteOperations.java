@@ -8,6 +8,7 @@ import boursier.louis.hermeez.backend.entities.route.osrmroute.OSRMRoute;
 import boursier.louis.hermeez.backend.usecases.user.MongoUserOperations;
 import boursier.louis.hermeez.backend.utils.Constants;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.IOException;
 
 public class PersonalServerRouteOperations implements RouteOperations {
 
@@ -40,7 +43,7 @@ public class PersonalServerRouteOperations implements RouteOperations {
     }
 
     @Override
-    public ResponseEntity<RouteDTO> route(Coordinates coordinates) {
+    public ResponseEntity<RouteDTO> route(Coordinates coordinates) throws JsonProcessingException {
         String OSRMFormatCoordinates = formatCoordinatesToOSRMCoordinates(coordinates.getRawContent());
         String routeURL = ROUTING_SERVER_BASE_URL + ROUTING_SERVER_ROUTE_PATH + OSRMFormatCoordinates + "?" +
                 ROUTING_SERVER_STEPS_DETAILS_PARAMETER;
@@ -51,7 +54,7 @@ public class PersonalServerRouteOperations implements RouteOperations {
         return processRequestToOSRMServer(request);
     }
 
-    private ResponseEntity<RouteDTO> processRequestToOSRMServer(WebClient.RequestHeadersSpec<?> request) {
+    private ResponseEntity<RouteDTO> processRequestToOSRMServer(WebClient.RequestHeadersSpec<?> request) throws JsonProcessingException {
         String response = request.exchange().onErrorResume(e -> {
             LOGGER.error("Route endpoint error while requesting the OSRM server: " + e.getMessage());
             throw new OSRMQueryException();
@@ -60,22 +63,14 @@ public class PersonalServerRouteOperations implements RouteOperations {
         JsonNode root = null;
         try {
             root = objectMapper.readTree(response);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             LOGGER.error("Error while reading OSRM response for route endpoint: " + e.getMessage());
             throw new OSRMResponseException();
         }
         if (root.has("code")) {
             if (root.path("code").asText().equals(OSRM_OK_RESPONSE_CODE)) {
                 LOGGER.info("routing server called for route endpoint");
-                // TODO use a bean to specify the route implementation used?
-                // TODO remove try catch for cleaner handler?
-                try {
-                    return new ResponseEntity<>(new OSRMRoute(response).toRouteDTO(), HttpStatus.OK);
-                } catch (JsonProcessingException e) {
-                    // TODO clean
-                    // e.printStackTrace();
-                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+                return new ResponseEntity<>(new OSRMRoute(response).toRouteDTO(), HttpStatus.OK);
             } else {
                 LOGGER.error("Error while looking at OSRM response for route endpoint: " + root.path("code").asText());
                 throw new OSRMResponseException();
